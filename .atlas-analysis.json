@@ -1,0 +1,89 @@
+{
+  "projectType": "frontend",
+  "projectName": "ItzHypeR Portfolio",
+  "projectDescription": "A modern, high-performance personal portfolio website showcasing projects, skills, and professional experience.",
+  "theme": "aspen",
+  "primaryColor": "#fbc926",
+  "lightColor": "#8c73fa",
+  "darkColor": null,
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": ["introduction", "quickstart", "installation"]
+          },
+          {
+            "group": "Core Concepts",
+            "pages": ["architecture", "project-structure", "routing"]
+          },
+          {
+            "group": "Components",
+            "pages": [
+              "components/navbar",
+              "components/hero",
+              "components/projects",
+              "components/project-detail",
+              "components/about",
+              "components/contact",
+              "components/footer",
+              "components/marquee",
+              "components/hire-me"
+            ]
+          },
+          {
+            "group": "Customization",
+            "pages": [
+              "customization/styling",
+              "customization/content",
+              "customization/projects-data",
+              "customization/contact-form"
+            ]
+          },
+          {
+            "group": "Deployment",
+            "pages": ["deployment/build", "deployment/hosting"]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Data Structures",
+            "pages": ["api/project-schema", "api/skills-data"]
+          },
+          {
+            "group": "Configuration",
+            "pages": ["api/vite-config", "api/environment-variables"]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Modern React 19 architecture with Vite build tooling",
+    "Client-side routing with React Router DOM",
+    "CSS Modules for scoped component styling",
+    "Responsive design optimized for all screen sizes",
+    "Dark-themed UI with glassmorphism effects",
+    "Project showcase with detailed case studies",
+    "Integrated contact form with EmailJS",
+    "Performance-optimized with lazy loading"
+  ],
+  "publicApiSurface": [
+    "projects.js data export",
+    "Hero component",
+    "Navbar component",
+    "Projects component",
+    "ProjectDetail component",
+    "About component",
+    "Contact component",
+    "Footer component",
+    "Marquee component",
+    "HireMe component",
+    "Checkbox component"
+  ]
+}
