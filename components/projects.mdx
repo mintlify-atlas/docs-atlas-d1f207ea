@@ -1,0 +1,377 @@
+---
+title: 'Projects Component'
+description: 'Grid showcase of project cards with tech tags and case study links'
+icon: 'briefcase'
+---
+
+## Overview
+
+The **Projects** component displays a grid of project cards, each featuring an image, title, tech stack, description, and a link to view the full case study. It dynamically renders from project data.
+
+<Note>
+  This component is data-driven and pulls from a centralized `projects` array, making it easy to add or update portfolio items.
+</Note>
+
+## Component Structure
+
+- **Location**: `src/components/Projects/Projects.jsx`
+- **Styles**: `src/components/Projects/Projects.module.css`
+- **Data Source**: `src/data/projects.js`
+- **Dependencies**: `react-router-dom` for navigation
+
+## Implementation
+
+### Basic Usage
+
+```jsx
+import Projects from './components/Projects/Projects';
+
+export default function App() {
+  return (
+    <main>
+      <Projects />
+    </main>
+  );
+}
+```
+
+### Full Component Code
+
+```jsx
+import { Link } from 'react-router-dom';
+import { projects } from '../../data/projects';
+import styles from './Projects.module.css';
+
+function ProjectCard({ project }) {
+    return (
+        <article className={styles.card}>
+            <div className={styles.imgWrap}>
+                <div className={styles.imgOverlay} />
+                <img
+                    src={project.img}
+                    alt={project.imgAlt}
+                    className={styles.cardImg}
+                    loading="lazy"
+                />
+            </div>
+            <div className={styles.cardBody}>
+                <div className={styles.cardHeader}>
+                    <div>
+                        <h3 className={styles.cardTitle}>{project.title}</h3>
+                        <div className={styles.techContainer}>
+                            {project.techList.map((tech, index) => (
+                                <span key={`${tech}-${index}`} className={styles.cardTech}>
+                                    {tech}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+                <p className={styles.cardDesc}>{project.desc}</p>
+                <Link to={`/project/${project.id}`} className={styles.caseStudyBtn}>
+                    View Case Study
+                    <span className="material-icons">arrow_forward</span>
+                </Link>
+            </div>
+        </article>
+    );
+}
+
+export default function Projects() {
+    return (
+        <section id="projects" className={styles.section}>
+            <div className="container">
+                <div className={styles.sectionHeader}>
+                    <h2 className={styles.sectionTitle}>SELECTED WORKS</h2>
+                    <span className={styles.sectionDate}>/// 2022 - 2025</span>
+                </div>
+                <div className={styles.grid}>
+                    {projects.map((p) => (
+                        <ProjectCard key={p.id} project={p} />
+                    ))}
+                </div>
+            </div>
+        </section>
+    );
+}
+```
+
+## Component Breakdown
+
+### Projects Section
+
+The main component renders:
+
+1. **Section Header**: Title and date range
+2. **Project Grid**: Maps over projects array to render cards
+
+```jsx
+<div className={styles.sectionHeader}>
+    <h2 className={styles.sectionTitle}>SELECTED WORKS</h2>
+    <span className={styles.sectionDate}>/// 2022 - 2025</span>
+</div>
+```
+
+### ProjectCard Component
+
+Internal component that renders individual project cards with props:
+
+**Props**:
+- `project`: Object containing project data (id, title, img, desc, techList, etc.)
+
+## ProjectCard Structure
+
+<Tabs>
+  <Tab title="Image Section">
+    ```jsx
+    <div className={styles.imgWrap}>
+        <div className={styles.imgOverlay} />
+        <img
+            src={project.img}
+            alt={project.imgAlt}
+            className={styles.cardImg}
+            loading="lazy"
+        />
+    </div>
+    ```
+    
+    Image wrapper with overlay effect and lazy loading for performance.
+  </Tab>
+  
+  <Tab title="Card Body">
+    ```jsx
+    <div className={styles.cardBody}>
+        <div className={styles.cardHeader}>
+            <h3 className={styles.cardTitle}>{project.title}</h3>
+            <div className={styles.techContainer}>
+                {project.techList.map((tech, index) => (
+                    <span key={`${tech}-${index}`} className={styles.cardTech}>
+                        {tech}
+                    </span>
+                ))}
+            </div>
+        </div>
+        <p className={styles.cardDesc}>{project.desc}</p>
+        <Link to={`/project/${project.id}`} className={styles.caseStudyBtn}>
+            View Case Study
+            <span className="material-icons">arrow_forward</span>
+        </Link>
+    </div>
+    ```
+    
+    Contains title, tech tags, description, and CTA link.
+  </Tab>
+</Tabs>
+
+## Project Data Structure
+
+Projects are imported from `src/data/projects.js`:
+
+```javascript
+export const projects = [
+    {
+        id: 'chatverde',
+        title: 'CHAT VERDE',
+        tagline: 'CONVERSATIONAL APP',
+        tech: 'F# • .NET • NLP • C#',
+        techList: ['F#', '.NET', 'NLP', 'C#', 'Windows Forms'],
+        desc: 'Optimized search performance handling natural language queries with under 100ms response times.',
+        fullDesc: 'A conversational console application...',
+        challenge: 'Finding products in a catalog...',
+        solution: 'I developed a search engine...',
+        stats: {
+            role: 'Software Engineer',
+            timeline: 'November 2025',
+            team: 'Estelí, Nicaragua'
+        },
+        img: '/ChatVerde.webp',
+        imgAlt: 'Console conversational interface'
+    },
+    // ... more projects
+];
+```
+
+### Required Fields
+
+<Accordion title="Project Object Schema">
+  - `id` (string): Unique identifier for routing
+  - `title` (string): Project name
+  - `tagline` (string): Short category label
+  - `techList` (array): Array of technology strings
+  - `desc` (string): Short description for card
+  - `fullDesc` (string): Extended description for detail page
+  - `challenge` (string): Problem statement
+  - `solution` (string): Implementation approach
+  - `stats` (object): role, timeline, team
+  - `img` (string): Image path
+  - `imgAlt` (string): Accessible image description
+</Accordion>
+
+## Tech Stack Tags
+
+Tech tags are rendered dynamically from the `techList` array:
+
+```jsx
+<div className={styles.techContainer}>
+    {project.techList.map((tech, index) => (
+        <span key={`${tech}-${index}`} className={styles.cardTech}>
+            {tech}
+        </span>
+    ))}
+</div>
+```
+
+<Note>
+  Uses index in the key as a fallback since tech items may not be unique (though they typically are).
+</Note>
+
+## Navigation
+
+Each card links to a detailed project page:
+
+```jsx
+<Link to={`/project/${project.id}`} className={styles.caseStudyBtn}>
+    View Case Study
+    <span className="material-icons">arrow_forward</span>
+</Link>
+```
+
+Routes to `/project/[id]` where the ProjectDetail component renders full case study.
+
+## CSS Module Styling
+
+### Grid Layout
+
+```css
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+```
+
+Responsive grid that adapts column count based on available space.
+
+### Card Styling
+
+Key classes:
+
+- `.card`: Main card container with border and shadow
+- `.imgWrap`: Image container with aspect ratio and overflow
+- `.imgOverlay`: Hover overlay effect
+- `.cardBody`: Content container with padding
+- `.techContainer`: Flex container for tech tags
+- `.cardTech`: Individual tech tag badges
+- `.caseStudyBtn`: CTA button with arrow icon
+
+## Image Optimization
+
+```jsx
+<img
+    src={project.img}
+    alt={project.imgAlt}
+    className={styles.cardImg}
+    loading="lazy"
+/>
+```
+
+<Note>
+  Uses **lazy loading** since projects are below the fold, improving initial page load performance.
+</Note>
+
+## Customization
+
+### Add New Project
+
+Edit `src/data/projects.js`:
+
+```javascript
+export const projects = [
+    // ... existing projects
+    {
+        id: 'new-project',
+        title: 'NEW PROJECT',
+        tagline: 'WEB APP',
+        techList: ['React', 'Node.js', 'MongoDB'],
+        desc: 'Short project description here.',
+        fullDesc: 'Extended description...',
+        challenge: 'The problem...',
+        solution: 'How you solved it...',
+        stats: {
+            role: 'Full Stack Developer',
+            timeline: 'Q1 2026',
+            team: '2 Developers'
+        },
+        img: '/new-project.webp',
+        imgAlt: 'Project screenshot'
+    }
+];
+```
+
+### Change Section Title
+
+```jsx
+<h2 className={styles.sectionTitle}>MY PORTFOLIO</h2>
+<span className={styles.sectionDate}>/// 2020 - PRESENT</span>
+```
+
+### Modify Grid Columns
+
+Update CSS:
+
+```css
+.grid {
+  grid-template-columns: repeat(3, 1fr); /* Fixed 3 columns */
+  /* or */
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); /* Wider cards */
+}
+```
+
+### Custom Tech Tag Colors
+
+Add conditional styling based on tech name:
+
+```jsx
+<span 
+    key={`${tech}-${index}`} 
+    className={styles.cardTech}
+    data-tech={tech.toLowerCase()}
+>
+    {tech}
+</span>
+```
+
+Then in CSS:
+
+```css
+.cardTech[data-tech="react"] {
+  background-color: #61dafb;
+  color: #000;
+}
+
+.cardTech[data-tech="node.js"] {
+  background-color: #68a063;
+}
+```
+
+## Accessibility
+
+- Semantic `<section>` element with unique `id="projects"`
+- Each card uses `<article>` for semantic structure
+- Proper heading hierarchy (h2 for section, h3 for cards)
+- Descriptive alt text for all images
+- Keyboard navigable links
+- Material Icons are decorative, not essential for understanding
+
+## Performance Optimizations
+
+1. **Lazy loading images**: `loading="lazy"` attribute
+2. **Efficient mapping**: Single render pass with `.map()`
+3. **CSS Modules**: Scoped styles, no runtime overhead
+4. **Memoization opportunity**: Could wrap ProjectCard in `React.memo()` if project list is very large
+
+## Related Components
+
+- [ProjectDetail](/components/project-detail): Full case study page for individual projects
+- [Navbar](/components/navbar): Links to #projects section
+- [Hero](/components/hero): Contains "VIEW PROJECTS" CTA

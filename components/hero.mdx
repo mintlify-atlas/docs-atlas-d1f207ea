@@ -1,0 +1,345 @@
+---
+title: 'Hero Component'
+description: 'Full-screen hero section with animated image card and CTA buttons'
+icon: 'house-flag'
+---
+
+## Overview
+
+The **Hero** component is a full-screen introductory section featuring a two-column layout with text content on the left and a stylized image card on the right. It uses neobrutalist design with overlay effects, grid patterns, and scanlines.
+
+<Note>
+  This component serves as the landing section and is designed to create a strong visual impact with its futuristic tech aesthetic.
+</Note>
+
+## Component Structure
+
+- **Location**: `src/components/Hero/Hero.jsx`
+- **Styles**: `src/components/Hero/Hero.module.css`
+- **No props required** - fully self-contained
+
+## Implementation
+
+### Basic Usage
+
+```jsx
+import Hero from './components/Hero/Hero';
+
+export default function App() {
+  return (
+    <main>
+      <Hero />
+      {/* Other sections */}
+    </main>
+  );
+}
+```
+
+### Full Component Code
+
+```jsx
+import styles from './Hero.module.css';
+
+export default function Hero() {
+    return (
+        <section id="hero" className={styles.hero}>
+            <div className={`container ${styles.inner}`}>
+                {/* Left column */}
+                <div className={styles.left}>
+                    <div className={styles.tagline}>
+                        <p className={styles.role}>Full Stack Engineer</p>
+                        <p className={styles.location}>BASED IN ESTELI, NICARAGUA</p>
+                    </div>
+
+                    <h1 className={styles.headline}>
+                        BUILDING <br />
+                        <span className={styles.outlineWord}>ROBUST</span> <br />
+                        SYSTEMS.
+                    </h1>
+
+                    <div className={styles.descBox}>
+                        <p>
+                            I craft high-performance digital experiences with brutal
+                            efficiency. Specializing in scalable architecture, clean code,
+                            and user-centric interfaces.
+                        </p>
+                    </div>
+
+                    <div className={styles.ctas}>
+                        <a href="#projects" className={styles.btnPrimary}>
+                            VIEW PROJECTS
+                            <span className="material-icons">arrow_downward</span>
+                        </a>
+                        <a href="https://github.com/xItzHypeR" target="_blank" rel="noopener noreferrer" className={styles.btnSecondary}>
+                            GITHUB
+                            <span className="material-icons">code</span>
+                        </a>
+                    </div>
+                </div>
+
+                {/* Right column: image card */}
+                <div className={styles.right}>
+                    <div className={`${styles.imageCard} code-overlay`}>
+                        <div className={styles.gridOverlay} />
+                        <div className={styles.colorOverlay} />
+                        <div className={styles.scanlines} />
+                        <img
+                            src="/GustavoPeralta.webp"
+                            alt="Stylized developer portrait with tech aesthetic"
+                            className={styles.photo}
+                            fetchpriority="high"
+                            loading="eager"
+                        />
+                        <div className={`${styles.corner} ${styles.cornerTL}`} />
+                        <div className={`${styles.corner} ${styles.cornerTR}`} />
+                        <div className={`${styles.corner} ${styles.cornerBR}`} />
+                        <div className={styles.devTag}>&lt;GUSTAVO PERALTA /&gt;</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+}
+```
+
+## Layout Structure
+
+### Two-Column Grid
+
+The Hero uses a responsive two-column layout:
+
+<Tabs>
+  <Tab title="Left Column">
+    Contains text content in vertical flow:
+    - **Tagline**: Role and location
+    - **Headline**: Large statement with outlined word
+    - **Description**: Value proposition paragraph
+    - **CTAs**: Two action buttons with icons
+  </Tab>
+  
+  <Tab title="Right Column">
+    Contains the stylized image card with:
+    - Grid overlay effect
+    - Color tint overlay
+    - Scanline animation
+    - Corner decorations
+    - Developer tag label
+  </Tab>
+</Tabs>
+
+## Text Content Elements
+
+### Tagline
+
+```jsx
+<div className={styles.tagline}>
+    <p className={styles.role}>Full Stack Engineer</p>
+    <p className={styles.location}>BASED IN ESTELI, NICARAGUA</p>
+</div>
+```
+
+Two-line intro with role and location information.
+
+### Headline
+
+```jsx
+<h1 className={styles.headline}>
+    BUILDING <br />
+    <span className={styles.outlineWord}>ROBUST</span> <br />
+    SYSTEMS.
+</h1>
+```
+
+<Note>
+  The middle word uses `.outlineWord` class for an outlined/stroked text effect, creating visual hierarchy.
+</Note>
+
+### Description Box
+
+```jsx
+<div className={styles.descBox}>
+    <p>
+        I craft high-performance digital experiences with brutal
+        efficiency. Specializing in scalable architecture, clean code,
+        and user-centric interfaces.
+    </p>
+</div>
+```
+
+Value proposition wrapped in a styled container.
+
+## Call-to-Action Buttons
+
+Two distinct CTA styles:
+
+<CodeGroup>
+```jsx Primary Button
+<a href="#projects" className={styles.btnPrimary}>
+    VIEW PROJECTS
+    <span className="material-icons">arrow_downward</span>
+</a>
+```
+
+```jsx Secondary Button
+<a href="https://github.com/xItzHypeR" target="_blank" rel="noopener noreferrer" className={styles.btnSecondary}>
+    GITHUB
+    <span className="material-icons">code</span>
+</a>
+```
+</CodeGroup>
+
+**Features**:
+- Material Icons for visual enhancement
+- Primary scrolls to #projects section
+- Secondary opens GitHub in new tab
+- Both use neobrutalist shadow effects
+
+## Image Card Effects
+
+The right column features a layered image card with multiple visual effects:
+
+### Overlay Layers
+
+<Accordion title="Grid Overlay">
+  ```jsx
+  <div className={styles.gridOverlay} />
+  ```
+  Creates a subtle grid pattern over the image for a technical/digital aesthetic.
+</Accordion>
+
+<Accordion title="Color Overlay">
+  ```jsx
+  <div className={styles.colorOverlay} />
+  ```
+  Applies a tinted color blend over the image for consistency with the theme.
+</Accordion>
+
+<Accordion title="Scanlines">
+  ```jsx
+  <div className={styles.scanlines} />
+  ```
+  Animated horizontal scanlines creating a retro-futuristic CRT monitor effect.
+</Accordion>
+
+### Corner Decorations
+
+```jsx
+<div className={`${styles.corner} ${styles.cornerTL}`} />
+<div className={`${styles.corner} ${styles.cornerTR}`} />
+<div className={`${styles.corner} ${styles.cornerBR}`} />
+```
+
+Three corner brackets (top-left, top-right, bottom-right) framing the image with geometric accents.
+
+### Developer Tag
+
+```jsx
+<div className={styles.devTag}>&lt;GUSTAVO PERALTA /&gt;</div>
+```
+
+HTML-style tag label positioned at the bottom of the image card.
+
+## Image Optimization
+
+```jsx
+<img
+    src="/GustavoPeralta.webp"
+    alt="Stylized developer portrait with tech aesthetic"
+    className={styles.photo}
+    fetchpriority="high"
+    loading="eager"
+/>
+```
+
+<Note>
+  Uses **WebP format** for optimal compression and **fetchpriority="high"** + **loading="eager"** to prioritize loading since it's above the fold.
+</Note>
+
+## Customization
+
+### Change Text Content
+
+```jsx
+<div className={styles.tagline}>
+    <p className={styles.role}>Your Role Here</p>
+    <p className={styles.location}>YOUR LOCATION</p>
+</div>
+
+<h1 className={styles.headline}>
+    YOUR <br />
+    <span className={styles.outlineWord}>HEADLINE</span> <br />
+    HERE.
+</h1>
+```
+
+### Update CTAs
+
+```jsx
+<div className={styles.ctas}>
+    <a href="#portfolio" className={styles.btnPrimary}>
+        SEE MY WORK
+        <span className="material-icons">work</span>
+    </a>
+    <a href="/contact" className={styles.btnSecondary}>
+        CONTACT
+        <span className="material-icons">email</span>
+    </a>
+</div>
+```
+
+### Replace Image
+
+```jsx
+<img
+    src="/your-image.webp"
+    alt="Your descriptive alt text"
+    className={styles.photo}
+    fetchpriority="high"
+    loading="eager"
+/>
+```
+
+### Modify Developer Tag
+
+```jsx
+<div className={styles.devTag}>&lt;YOUR NAME /&gt;</div>
+```
+
+## CSS Module Patterns
+
+Key styling patterns used:
+
+- **Container class**: Global `.container` combined with local `.inner` for responsive width
+- **Grid/Flexbox**: Responsive two-column layout
+- **Absolute positioning**: Overlays and decorative elements
+- **CSS animations**: Scanline effects
+- **Transform effects**: Button hover states
+- **Z-index layering**: Stacking overlays correctly
+
+## Responsive Design
+
+The Hero adapts across breakpoints:
+
+- **Desktop**: Two-column side-by-side layout
+- **Tablet**: Adjusted column widths
+- **Mobile**: Stacked single column, image card scales down
+
+## Accessibility
+
+- Semantic `<section>` with unique `id="hero"`
+- Proper heading hierarchy (h1 for main headline)
+- Descriptive alt text for image
+- External links use `rel="noopener noreferrer"`
+- Material Icons provide visual enhancement (not relied upon for meaning)
+
+## Design Philosophy
+
+The Hero embodies **neobrutalist + cyberpunk** aesthetics:
+
+- Bold typography with high contrast
+- Outlined/stroked text effects
+- Layered overlays and effects
+- Geometric corner decorations
+- Retro-futuristic scanlines
+- Strong shadows and borders
+- Uppercase text for impact

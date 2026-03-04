@@ -1,0 +1,503 @@
+---
+title: 'ProjectDetail Component'
+description: 'Full case study page with problem/solution cards and project metadata'
+icon: 'file-lines'
+---
+
+## Overview
+
+The **ProjectDetail** component renders a comprehensive case study page for individual projects. It displays the project header, hero image, problem/solution breakdown, tech stack, stats, and navigation to the next project.
+
+<Note>
+  This is a **routed page component** that uses React Router's `useParams` to fetch the correct project data based on the URL parameter.
+</Note>
+
+## Component Structure
+
+- **Location**: `src/components/ProjectDetail/ProjectDetail.jsx`
+- **Styles**: `src/components/ProjectDetail/ProjectDetail.module.css`
+- **Data Source**: `src/data/projects.js`
+- **Route**: `/project/:id`
+- **Dependencies**: `react-router-dom` (useParams, Link, useNavigate)
+
+## Implementation
+
+### Route Configuration
+
+In your router setup:
+
+```jsx
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import ProjectDetail from './components/ProjectDetail/ProjectDetail';
+
+<BrowserRouter>
+  <Routes>
+    <Route path="/project/:id" element={<ProjectDetail />} />
+    {/* Other routes */}
+  </Routes>
+</BrowserRouter>
+```
+
+### Full Component Code
+
+```jsx
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { projects } from '../../data/projects';
+import styles from './ProjectDetail.module.css';
+import { useEffect } from 'react';
+
+export default function ProjectDetail() {
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const project = projects.find(p => p.id === id);
+
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, [id]);
+
+    if (!project) {
+        return (
+            <div className={styles.container}>
+                <h2>Project not found</h2>
+                <Link to="/" className={styles.backBtn}>Back Home</Link>
+            </div>
+        );
+    }
+
+    const nextProject = projects[(projects.indexOf(project) + 1) % projects.length];
+
+    return (
+        <div className={styles.page}>
+            <nav className={styles.nav}>
+                <div className={`container ${styles.navInner}`}>
+                    <Link to="/" className={styles.backBtn}>
+                        <span className="material-icons">arrow_back</span>
+                        BACK TO PROJECTS
+                    </Link>
+                </div>
+            </nav>
+
+            <main className={`container ${styles.main}`}>
+                <header className={styles.header}>
+                    <div className={styles.headerText}>
+                        <div className={styles.tagline}>{project.tagline}</div>
+                        <h1 className={styles.title}>
+                            {project.title.split(' ').map((word, i) => (
+                                <span key={`${word}-${i}`}>{word}<br /></span>
+                            ))}
+                        </h1>
+                    </div>
+                    <div className={styles.headerCtas}>
+                        {/* Placeholder for live demo / view code buttons */}
+                    </div>
+                    <p className={styles.shortDesc}>
+                        {project.fullDesc}
+                    </p>
+                </header>
+
+                <section className={styles.heroImageWrap}>
+                    <div className={styles.imageDecor} />
+                    <div className={styles.imageContainer}>
+                        <img src={project.img} alt={project.imgAlt} className={styles.heroImg} />
+                        <div className={styles.imgBadge}>
+                            <span className={styles.imgName}>
+                                {project.title}
+                            </span>
+                        </div>
+                    </div>
+                </section>
+
+                <div className={styles.marquee}>
+                    <div className={styles.marqueeInner}>
+                        {[...Array(6)].map((_, i) => (
+                            <span key={`tech-${i}`}>
+                                {project.techList.join(' • ')} •
+                            </span>
+                        ))}
+                    </div>
+                </div>
+
+                <div className={styles.contentGrid}>
+                    <div className={styles.storyCol}>
+                        <div className={styles.neoCard}>
+                            <div className={`${styles.cardBadge} ${styles.badgePink}`}>The Problem</div>
+                            <h2 className={styles.cardTitle}>
+                                <span className="material-icons">warning</span>
+                                The Challenge
+                            </h2>
+                            <p className={styles.cardText}>{project.challenge}</p>
+                        </div>
+
+                        <div className={styles.neoCard}>
+                            <div className={`${styles.cardBadge} ${styles.badgeGreen}`}>The Solution</div>
+                            <h2 className={styles.cardTitle}>
+                                <span className="material-icons">check_circle</span>
+                                Implementation
+                            </h2>
+                            <p className={styles.cardText}>{project.solution}</p>
+                        </div>
+                    </div>
+
+                    <aside className={styles.metaCol}>
+                        <div className={styles.statsBox}>
+                            <h3 className={styles.statsTitle}>Project Stats</h3>
+                            <div className={styles.statItem}>
+                                <span className={styles.statLabel}>Role</span>
+                                <span className={styles.statValue}>{project.stats.role}</span>
+                            </div>
+                            <div className={styles.statItem}>
+                                <span className={styles.statLabel}>Timeline</span>
+                                <span className={styles.statValue}>{project.stats.timeline}</span>
+                            </div>
+                            <div className={styles.statItem}>
+                                <span className={styles.statLabel}>Team</span>
+                                <span className={styles.statValue}>{project.stats.team}</span>
+                            </div>
+                        </div>
+
+                        <div className={styles.techBox}>
+                            <h3 className={styles.statsTitle}>Tech Stack</h3>
+                            <div className={styles.techList}>
+                                {project.techList.map(tech => (
+                                    <span key={tech} className={styles.techTag}>{tech}</span>
+                                ))}
+                            </div>
+                        </div>
+
+                        <Link to={`/project/${nextProject.id}`} className={styles.nextProject}>
+                            <div className={styles.nextDecor} />
+                            <div className={styles.nextContent}>
+                                <span className={styles.nextLabel}>Next Project</span>
+                                <h4 className={styles.nextTitle}>{nextProject.title} →</h4>
+                            </div>
+                        </Link>
+                    </aside>
+                </div>
+            </main>
+        </div>
+    );
+}
+```
+
+## Data Fetching
+
+### URL Parameter
+
+```jsx
+const { id } = useParams();
+const project = projects.find(p => p.id === id);
+```
+
+Retrieves the project ID from the URL (`/project/chatverde`) and finds matching project in data array.
+
+### Error Handling
+
+```jsx
+if (!project) {
+    return (
+        <div className={styles.container}>
+            <h2>Project not found</h2>
+            <Link to="/" className={styles.backBtn}>Back Home</Link>
+        </div>
+    );
+}
+```
+
+<Note>
+  Displays fallback UI if project ID doesn't match any project in the data.
+</Note>
+
+### Auto-Scroll on Load
+
+```jsx
+useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}, [id]);
+```
+
+Scrolls to top when component mounts or when navigating between projects.
+
+## Page Sections
+
+<Tabs>
+  <Tab title="Navigation Bar">
+    ```jsx
+    <nav className={styles.nav}>
+        <div className={`container ${styles.navInner}`}>
+            <Link to="/" className={styles.backBtn}>
+                <span className="material-icons">arrow_back</span>
+                BACK TO PROJECTS
+            </Link>
+        </div>
+    </nav>
+    ```
+    
+    Sticky navigation with back button to return to homepage.
+  </Tab>
+  
+  <Tab title="Header">
+    ```jsx
+    <header className={styles.header}>
+        <div className={styles.headerText}>
+            <div className={styles.tagline}>{project.tagline}</div>
+            <h1 className={styles.title}>
+                {project.title.split(' ').map((word, i) => (
+                    <span key={`${word}-${i}`}>{word}<br /></span>
+                ))}
+            </h1>
+        </div>
+        <p className={styles.shortDesc}>{project.fullDesc}</p>
+    </header>
+    ```
+    
+    Project tagline, title (split into lines), and full description.
+  </Tab>
+  
+  <Tab title="Hero Image">
+    ```jsx
+    <section className={styles.heroImageWrap}>
+        <div className={styles.imageDecor} />
+        <div className={styles.imageContainer}>
+            <img src={project.img} alt={project.imgAlt} className={styles.heroImg} />
+            <div className={styles.imgBadge}>
+                <span className={styles.imgName}>{project.title}</span>
+            </div>
+        </div>
+    </section>
+    ```
+    
+    Large project image with decorative background and title badge.
+  </Tab>
+  
+  <Tab title="Tech Marquee">
+    ```jsx
+    <div className={styles.marquee}>
+        <div className={styles.marqueeInner}>
+            {[...Array(6)].map((_, i) => (
+                <span key={`tech-${i}`}>
+                    {project.techList.join(' • ')} •
+                </span>
+            ))}
+        </div>
+    </div>
+    ```
+    
+    Horizontally scrolling tech stack animation.
+  </Tab>
+</Tabs>
+
+## Content Grid Layout
+
+Two-column responsive grid:
+
+### Story Column (Left)
+
+Contains two neobrutalist cards:
+
+<Accordion title="Problem Card">
+  ```jsx
+  <div className={styles.neoCard}>
+      <div className={`${styles.cardBadge} ${styles.badgePink}`}>The Problem</div>
+      <h2 className={styles.cardTitle}>
+          <span className="material-icons">warning</span>
+          The Challenge
+      </h2>
+      <p className={styles.cardText}>{project.challenge}</p>
+  </div>
+  ```
+  
+  Pink-badged card describing the project challenge.
+</Accordion>
+
+<Accordion title="Solution Card">
+  ```jsx
+  <div className={styles.neoCard}>
+      <div className={`${styles.cardBadge} ${styles.badgeGreen}`}>The Solution</div>
+      <h2 className={styles.cardTitle}>
+          <span className="material-icons">check_circle</span>
+          Implementation
+      </h2>
+      <p className={styles.cardText}>{project.solution}</p>
+  </div>
+  ```
+  
+  Green-badged card explaining how the problem was solved.
+</Accordion>
+
+### Meta Column (Right)
+
+Sidebar with project metadata:
+
+<CodeGroup>
+```jsx Project Stats
+<div className={styles.statsBox}>
+    <h3 className={styles.statsTitle}>Project Stats</h3>
+    <div className={styles.statItem}>
+        <span className={styles.statLabel}>Role</span>
+        <span className={styles.statValue}>{project.stats.role}</span>
+    </div>
+    <div className={styles.statItem}>
+        <span className={styles.statLabel}>Timeline</span>
+        <span className={styles.statValue}>{project.stats.timeline}</span>
+    </div>
+    <div className={styles.statItem}>
+        <span className={styles.statLabel}>Team</span>
+        <span className={styles.statValue}>{project.stats.team}</span>
+    </div>
+</div>
+```
+
+```jsx Tech Stack
+<div className={styles.techBox}>
+    <h3 className={styles.statsTitle}>Tech Stack</h3>
+    <div className={styles.techList}>
+        {project.techList.map(tech => (
+            <span key={tech} className={styles.techTag}>{tech}</span>
+        ))}
+    </div>
+</div>
+```
+
+```jsx Next Project
+<Link to={`/project/${nextProject.id}`} className={styles.nextProject}>
+    <div className={styles.nextDecor} />
+    <div className={styles.nextContent}>
+        <span className={styles.nextLabel}>Next Project</span>
+        <h4 className={styles.nextTitle}>{nextProject.title} →</h4>
+    </div>
+</Link>
+```
+</CodeGroup>
+
+## Next Project Navigation
+
+Calculates the next project cyclically:
+
+```jsx
+const nextProject = projects[(projects.indexOf(project) + 1) % projects.length];
+```
+
+- Uses modulo `%` to loop back to first project after the last
+- Creates seamless project browsing experience
+- Links to `/project/${nextProject.id}`
+
+## Title Line Break Effect
+
+```jsx
+<h1 className={styles.title}>
+    {project.title.split(' ').map((word, i) => (
+        <span key={`${word}-${i}`}>{word}<br /></span>
+    ))}
+</h1>
+```
+
+Splits title by spaces and renders each word on a new line for dramatic vertical layout.
+
+**Example**:
+```
+CHAT
+VERDE
+```
+
+## Tech Marquee Animation
+
+```jsx
+{[...Array(6)].map((_, i) => (
+    <span key={`tech-${i}`}>
+        {project.techList.join(' • ')} •
+    </span>
+))}
+```
+
+Creates 6 repetitions of the tech stack for infinite scroll effect. CSS handles the animation.
+
+## Customization
+
+### Add CTA Buttons
+
+Uncomment and populate the header CTAs:
+
+```jsx
+<div className={styles.headerCtas}>
+    <a href={project.liveUrl} className={styles.btnPrimary} target="_blank" rel="noopener noreferrer">
+        LIVE DEMO
+    </a>
+    <a href={project.repoUrl} className={styles.btnSecondary} target="_blank" rel="noopener noreferrer">
+        VIEW CODE
+    </a>
+</div>
+```
+
+Ensure your project data includes `liveUrl` and `repoUrl` fields.
+
+### Modify Card Badges
+
+```jsx
+<div className={`${styles.cardBadge} ${styles.badgeBlue}`}>Context</div>
+```
+
+Add new badge color variants in CSS:
+
+```css
+.badgeBlue {
+  background-color: #00b4d8;
+  color: #fff;
+}
+```
+
+### Change Marquee Speed
+
+Adjust CSS animation duration:
+
+```css
+.marqueeInner {
+  animation: scroll 20s linear infinite; /* Slower: increase seconds */
+}
+```
+
+### Add More Stat Items
+
+```jsx
+<div className={styles.statItem}>
+    <span className={styles.statLabel}>Industry</span>
+    <span className={styles.statValue}>{project.stats.industry}</span>
+</div>
+```
+
+## CSS Module Patterns
+
+Key styling approaches:
+
+- **Neobrutalist cards**: `.neoCard` with bold borders and shadows
+- **Badge overlays**: Absolutely positioned colored badges
+- **Grid layout**: `.contentGrid` with responsive columns
+- **Marquee animation**: CSS keyframes for infinite scroll
+- **Decorative elements**: `.imageDecor`, `.nextDecor` for visual flair
+
+## Accessibility
+
+- Semantic HTML (`<main>`, `<header>`, `<section>`, `<aside>`)
+- Proper heading hierarchy (h1 → h2 → h3)
+- Descriptive alt text for images
+- Keyboard-navigable links
+- Material Icons used as visual enhancement (not essential for understanding)
+- Smooth scroll behavior for better UX
+
+## Performance
+
+- **Efficient data lookup**: `.find()` is O(n) but projects array is small
+- **Conditional rendering**: Only renders when project exists
+- **CSS Modules**: Scoped, optimized styles
+- **Auto-scroll**: Improves navigation UX
+- **Lazy images**: Could add `loading="lazy"` to hero image if below fold
+
+## Error States
+
+1. **Project not found**: Shows fallback message with back link
+2. **Invalid route**: Router handles 404 separately
+3. **Missing data fields**: Component assumes all fields exist (ensure data integrity)
+
+## Related Components
+
+- [Projects](/components/projects): Grid listing that links to detail pages
+- [Navbar](/components/navbar): Can add "Back" navigation here too

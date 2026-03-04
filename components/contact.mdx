@@ -1,0 +1,329 @@
+---
+title: 'Contact Component'
+description: 'A contact form component with EmailJS integration for sending messages directly from the portfolio'
+icon: 'envelope'
+---
+
+## Overview
+
+The Contact component provides a fully functional contact form that integrates with EmailJS to send messages directly to your email. It features form validation, error handling, and social media links, all styled with a neomorphic design.
+
+## Features
+
+- EmailJS integration for serverless email sending
+- Real-time form validation
+- Error state management with shake animation
+- Social media links (LinkedIn, Instagram)
+- Responsive layout with glowing accent effect
+- Styled with CSS Modules
+
+## Implementation
+
+The component is located at `src/components/Contact/Contact.jsx`:
+
+```jsx
+import styles from './Contact.module.css';
+import emailjs from '@emailjs/browser';
+import { useState } from 'react';
+
+export default function Contact() {
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [message, setMessage] = useState('');
+    const [error, setError] = useState('');
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        if (!name || !email || !message) {
+            setError('');
+            setTimeout(() => setError('Please fill in all fields.'), 10);
+            return;
+        }
+
+        emailjs.send(
+            import.meta.env.VITE_EMAILJS_SERVICE_ID,
+            import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+            {
+                name: name,
+                email: email,
+                message: message,
+            },
+            import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+        )
+            .then(() => {
+                alert('Message sent!');
+                setName('');
+                setEmail('');
+                setMessage('');
+            })
+            .catch((error) => {
+                console.error(error);
+                alert('Something went wrong.');
+            });
+    };
+
+    return (
+        <section id="contact" className={styles.section}>
+            <div className="container">
+                <div className={styles.box}>
+                    <div className={styles.glowBlob} />
+                    <div className={styles.inner}>
+                        <div className={styles.left}>
+                            <h2 className={styles.title}>READY TO SCALE?</h2>
+                            <p className={styles.subtitle}>
+                                Currently available for freelance projects...
+                            </p>
+                            <form className={styles.form} onSubmit={handleSubmit}>
+                                <label htmlFor="name" className={styles.label}>NAME</label>
+                                <input 
+                                    id="name" 
+                                    type="text" 
+                                    placeholder="Name" 
+                                    className={styles.input} 
+                                    value={name} 
+                                    onChange={(e) => setName(e.target.value)} 
+                                />
+                                {/* email and message fields... */}
+                                <div className={styles.buttonWrapper}>
+                                    {error && <p className={styles.error}>{error}</p>}
+                                    <button type="submit" className={styles.button}>
+                                        SEND MESSAGE
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        <div className={styles.links}>
+                            <a href="https://www.linkedin.com/in/..." 
+                               className={`${styles.socialBtn} ${styles.socialBtnLight}`}>
+                                LINKEDIN
+                            </a>
+                            <a href="https://www.instagram.com/..." 
+                               className={styles.socialBtn}>
+                                INSTAGRAM
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+}
+```
+
+## EmailJS Configuration
+
+### Required Environment Variables
+
+Create a `.env` file in your project root with the following variables:
+
+```bash
+VITE_EMAILJS_SERVICE_ID=your_service_id
+VITE_EMAILJS_TEMPLATE_ID=your_template_id
+VITE_EMAILJS_PUBLIC_KEY=your_public_key
+```
+
+### Setup Steps
+
+1. **Create an EmailJS Account**
+   - Sign up at [EmailJS](https://www.emailjs.com/)
+   - Create a new email service (Gmail, Outlook, etc.)
+
+2. **Get Your Service ID**
+   - Navigate to Email Services
+   - Copy your Service ID
+   - Add to `.env` as `VITE_EMAILJS_SERVICE_ID`
+
+3. **Create an Email Template**
+   - Go to Email Templates
+   - Create a new template with these template variables:
+     - `{{name}}` - Sender's name
+     - `{{email}}` - Sender's email
+     - `{{message}}` - Message content
+   - Copy the Template ID
+   - Add to `.env` as `VITE_EMAILJS_TEMPLATE_ID`
+
+4. **Get Your Public Key**
+   - Navigate to Account → General
+   - Copy your Public Key
+   - Add to `.env` as `VITE_EMAILJS_PUBLIC_KEY`
+
+5. **Install EmailJS Package**
+
+```bash
+npm install @emailjs/browser
+```
+
+## State Management
+
+The component uses React hooks to manage form state:
+
+- `name` - Stores the name input value
+- `email` - Stores the email input value
+- `message` - Stores the message textarea value
+- `error` - Stores validation error messages
+
+## Form Validation
+
+The form validates that all fields are filled before submission:
+
+```jsx
+if (!name || !email || !message) {
+    setError('');
+    setTimeout(() => setError('Please fill in all fields.'), 10);
+    return;
+}
+```
+
+The `setTimeout` trick triggers the shake animation by forcing a re-render.
+
+## CSS Module Styling
+
+### Key Styles
+
+**Container with Glow Effect:**
+```css
+.box {
+    background-color: var(--color-bg-mid);
+    border: 4px solid #ffffff;
+    padding: 3rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.glowBlob {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 16rem;
+    height: 16rem;
+    background-color: var(--color-primary);
+    border-radius: 9999px;
+    filter: blur(3rem);
+    opacity: 0.15;
+}
+```
+
+**Form Inputs:**
+```css
+.input {
+    padding: 0.75rem;
+    border: 2px solid #ffffff;
+    color: #ffffff;
+    background-color: var(--color-bg-dark);
+    transition: all 0.15s;
+}
+
+.input:focus {
+    border-color: var(--color-neon);
+    box-shadow: var(--shadow-neo);
+}
+```
+
+**Error Animation:**
+```css
+@keyframes shake {
+    0%   { transform: translateX(0); }
+    20%  { transform: translateX(-8px); }
+    40%  { transform: translateX(8px); }
+    60%  { transform: translateX(-8px); }
+    80%  { transform: translateX(8px); }
+    100% { transform: translateX(0); }
+}
+
+.error {
+    animation: shake 0.4s ease;
+    color: #ff0000;
+    font-weight: 700;
+}
+```
+
+**Social Buttons:**
+```css
+.socialBtn {
+    padding: 1rem 2rem;
+    background-color: var(--color-bg-dark);
+    border: 2px solid #ffffff;
+    box-shadow: var(--shadow-neo);
+    transition: all 0.15s;
+}
+
+.socialBtn:hover {
+    background-color: #ffffff;
+    color: var(--color-bg-dark);
+    transform: translate(4px, 4px);
+}
+```
+
+## Customization
+
+### Update Section Title
+
+Modify the title text in `Contact.jsx`:
+
+```jsx
+<h2 className={styles.title}>YOUR CUSTOM TITLE</h2>
+```
+
+### Update Subtitle
+
+Change the subtitle message:
+
+```jsx
+<p className={styles.subtitle}>
+    Your custom subtitle text here
+</p>
+```
+
+### Update Social Links
+
+Replace the social media URLs:
+
+```jsx
+<a href="https://linkedin.com/in/your-profile" 
+   className={`${styles.socialBtn} ${styles.socialBtnLight}`}>
+    LINKEDIN
+</a>
+```
+
+### Customize Colors
+
+Update CSS variables in `index.css`:
+
+```css
+:root {
+    --color-primary: #your-color;
+    --color-neon: #your-neon-color;
+    --shadow-neo: 4px 4px 0px 0px #your-color;
+}
+```
+
+### Modify Form Fields
+
+Add additional form fields by following the existing pattern:
+
+```jsx
+const [phone, setPhone] = useState('');
+
+<label htmlFor="phone" className={styles.label}>PHONE</label>
+<input 
+    id="phone" 
+    type="tel" 
+    className={styles.input} 
+    value={phone} 
+    onChange={(e) => setPhone(e.target.value)} 
+/>
+```
+
+## Accessibility
+
+- All form inputs have associated labels with `htmlFor` attributes
+- Semantic HTML (`<section>`, `<form>`, `<label>`)
+- Focus states for keyboard navigation
+- ARIA-compliant form structure
+
+## Browser Support
+
+- Modern browsers (Chrome, Firefox, Safari, Edge)
+- CSS Grid and Flexbox support required
+- CSS custom properties (variables) support required

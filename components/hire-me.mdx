@@ -1,0 +1,426 @@
+---
+title: 'Hire Me Component'
+description: 'A floating call-to-action button that links to the contact section'
+icon: 'circle-arrow-right'
+---
+
+## Overview
+
+The HireMe component is a fixed-position floating action button (FAB) that encourages visitors to get in touch. It features a bouncing animation to grab attention and smoothly scrolls users to the contact form when clicked.
+
+## Features
+
+- Fixed position in bottom-right corner
+- Bouncing animation to attract attention
+- Smooth scroll to contact section
+- Neomorphic design with border and shadow
+- Hidden on mobile, visible on tablet and up
+- Hover effects with shadow transition
+
+## Implementation
+
+The component is located at `src/components/HireMe/HireMe.jsx`:
+
+```jsx
+import styles from './HireMe.module.css';
+
+export default function HireMe() {
+    return (
+        <div className={styles.wrapper}>
+            <a href="#contact" className={styles.fab}>
+                HIRE ME
+            </a>
+        </div>
+    );
+}
+```
+
+## How It Works
+
+### Anchor Link to Contact Section
+
+The button uses a hash link to scroll to the contact section:
+
+```jsx
+<a href="#contact" className={styles.fab}>
+```
+
+This requires the Contact component to have `id="contact"`:
+
+```jsx
+<section id="contact" className={styles.section}>
+```
+
+### Smooth Scrolling
+
+Smooth scrolling is enabled globally in `index.css`:
+
+```css
+html {
+    scroll-behavior: smooth;
+}
+```
+
+## CSS Module Styling
+
+### Fixed Positioning
+
+```css
+.wrapper {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 40;
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .wrapper {
+        display: block;
+    }
+}
+```
+
+The button:
+- Stays fixed in the viewport
+- Positioned 2rem from bottom and right edges
+- High z-index (40) keeps it above other content
+- Hidden on mobile (< 768px) to avoid cluttering small screens
+
+### Bounce Animation
+
+```css
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.fab {
+    animation: bounce 2s infinite;
+}
+```
+
+The button bounces up and down continuously with a 2-second cycle.
+
+### Button Styling
+
+```css
+.fab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 5rem;
+    height: 5rem;
+    background-color: var(--color-primary);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-align: center;
+    border: 4px solid #ffffff;
+    border-radius: 9999px;
+    box-shadow: var(--shadow-neo);
+    transition: box-shadow 0.15s, transform 0.15s;
+}
+```
+
+Key features:
+- Circular shape (border-radius: 9999px)
+- Fixed size (5rem × 5rem)
+- Primary color background
+- Thick white border (4px)
+- Neomorphic shadow effect
+
+### Hover Effects
+
+```css
+.fab:hover {
+    box-shadow: none;
+    transform: translate(4px, 4px);
+    animation: none;
+}
+```
+
+On hover:
+- Shadow disappears
+- Button shifts down and right (4px)
+- Bounce animation stops
+- Creates a "pressed" effect
+
+## Customization
+
+### Change Button Text
+
+Modify the text in `HireMe.jsx`:
+
+```jsx
+<a href="#contact" className={styles.fab}>
+    CONTACT
+</a>
+```
+
+For longer text, adjust font size in CSS:
+
+```css
+.fab {
+    font-size: 0.65rem; /* Smaller for longer text */
+}
+```
+
+### Change Position
+
+Move to different corners:
+
+**Bottom-left:**
+```css
+.wrapper {
+    bottom: 2rem;
+    left: 2rem;
+}
+```
+
+**Top-right:**
+```css
+.wrapper {
+    top: 2rem;
+    right: 2rem;
+}
+```
+
+### Adjust Size
+
+```css
+.fab {
+    width: 6rem;
+    height: 6rem;
+    font-size: 0.85rem;
+}
+```
+
+### Change Colors
+
+Update the background color:
+
+```css
+.fab {
+    background-color: var(--neon-violet);
+}
+```
+
+Or use a custom color:
+
+```css
+.fab {
+    background-color: #ff0066;
+    border-color: #ffffff;
+}
+```
+
+### Modify Animation Speed
+
+```css
+.fab {
+    animation: bounce 1.5s infinite; /* Faster */
+}
+```
+
+Or:
+
+```css
+.fab {
+    animation: bounce 3s infinite; /* Slower */
+}
+```
+
+### Disable Animation
+
+```css
+.fab {
+    /* Remove or comment out the animation line */
+    /* animation: bounce 2s infinite; */
+}
+```
+
+### Change Bounce Height
+
+```css
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px); /* Higher bounce */
+    }
+}
+```
+
+### Show on Mobile
+
+Remove the media query display rule:
+
+```css
+.wrapper {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 40;
+    display: block; /* Always show */
+}
+```
+
+Or adjust the breakpoint:
+
+```css
+@media (min-width: 640px) {
+    .wrapper {
+        display: block;
+    }
+}
+```
+
+### Add Icon
+
+Include a Material Icon:
+
+```jsx
+<a href="#contact" className={styles.fab}>
+    <span className="material-icons">mail</span>
+</a>
+```
+
+Update CSS to accommodate icon:
+
+```css
+.fab {
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.fab .material-icons {
+    font-size: 1.5rem;
+}
+```
+
+### Change Link Target
+
+Link to a different section:
+
+```jsx
+<a href="#about" className={styles.fab}>
+    ABOUT
+</a>
+```
+
+Or link to external URL:
+
+```jsx
+<a href="mailto:your@email.com" className={styles.fab}>
+    EMAIL
+</a>
+```
+
+### Adjust Shadow Effect
+
+Modify the neomorphic shadow in `index.css`:
+
+```css
+:root {
+    --shadow-neo: 6px 6px 0px 0px var(--color-primary);
+}
+```
+
+Or override in component CSS:
+
+```css
+.fab {
+    box-shadow: 8px 8px 0px 0px #ffffff;
+}
+```
+
+## Usage in App
+
+The HireMe component should be placed at the root level of your app so it appears on all pages:
+
+```jsx
+import HireMe from './components/HireMe/HireMe';
+
+function App() {
+    return (
+        <>
+            <Navbar />
+            <Hero />
+            <About />
+            <Projects />
+            <Contact />
+            <Footer />
+            <HireMe />  {/* Fixed button appears over all content */}
+        </>
+    );
+}
+```
+
+## Accessibility
+
+### Keyboard Navigation
+
+The button is fully keyboard accessible as it's a standard anchor link.
+
+### Screen Readers
+
+The text is descriptive, but you can add an aria-label for clarity:
+
+```jsx
+<a href="#contact" 
+   className={styles.fab}
+   aria-label="Contact me for hire">
+    HIRE ME
+</a>
+```
+
+### Reduced Motion
+
+Respect user preferences for reduced motion:
+
+```css
+@media (prefers-reduced-motion: reduce) {
+    .fab {
+        animation: none;
+    }
+}
+```
+
+Add this to `HireMe.module.css` to disable the bounce animation for users who prefer reduced motion.
+
+## Focus State
+
+Add a focus style for keyboard navigation:
+
+```css
+.fab:focus {
+    outline: 2px solid var(--neon-violet);
+    outline-offset: 4px;
+}
+```
+
+## CSS Variables Used
+
+- `--color-primary` - Button background color
+- `--shadow-neo` - Neomorphic shadow effect
+
+## Browser Support
+
+- Modern browsers
+- CSS animations support required
+- Position: fixed support required
+- Flexbox support required
+- CSS custom properties support required
+
+## Performance
+
+- Pure CSS animation (GPU accelerated)
+- No JavaScript overhead
+- Minimal DOM footprint
+- Fixed positioning doesn't affect layout reflows

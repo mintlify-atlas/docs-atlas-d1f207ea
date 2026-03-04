@@ -1,0 +1,410 @@
+---
+title: "Routing"
+description: "Client-side routing with React Router DOM 7"
+icon: "route"
+---
+
+The portfolio uses **React Router DOM v7** for client-side navigation, enabling seamless transitions between pages without full page reloads.
+
+## Route Structure
+
+The application has two main routes:
+
+```
+/                    → Home page (portfolio landing)
+/project/:id         → Individual project case study
+```
+
+### Route Implementation
+
+Routes are defined in `src/App.jsx`:
+
+```jsx title="src/App.jsx"
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import ProjectDetail from './components/ProjectDetail/ProjectDetail';
+
+function Home() {
+  return (
+    <>
+      <Navbar />
+      <main className="bg-grid-pattern" style={{ paddingTop: '80px' }}>
+        <Hero />
+        <Marquee />
+        <Projects />
+        <About />
+        <Contact />
+      </main>
+      <Footer />
+      <HireMe />
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/project/:id" element={<ProjectDetail />} />
+      </Routes>
+    </Router>
+  );
+}
+```
+
+## Home Route (`/`)
+
+The home route renders the complete portfolio landing page as a single scrollable experience:
+
+<Steps>
+  <Step title="Navbar">
+    Fixed navigation header with smooth scroll to sections
+  </Step>
+  
+  <Step title="Hero">
+    Landing section with headline, CTA buttons, and profile image
+  </Step>
+  
+  <Step title="Marquee">
+    Scrolling tech stack showcase
+  </Step>
+  
+  <Step title="Projects">
+    Grid of project cards linking to case studies
+  </Step>
+  
+  <Step title="About">
+    Bio section with skills list
+  </Step>
+  
+  <Step title="Contact">
+    Contact form with EmailJS integration
+  </Step>
+  
+  <Step title="Footer">
+    Site footer with copyright
+  </Step>
+  
+  <Step title="HireMe">
+    Floating action button (FAB) linking to contact section
+  </Step>
+</Steps>
+
+### Scroll Behavior
+
+The home page uses **anchor links** for smooth navigation:
+
+```jsx title="Navbar.jsx (excerpt)"
+<nav className={styles.nav}>
+  <ul className={styles.navList}>
+    <li><a href="#hero">Home</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+```
+
+Each section has a corresponding `id` attribute:
+
+```jsx
+<section id="hero" className={styles.hero}>
+  {/* Hero content */}
+</section>
+
+<section id="projects" className={styles.section}>
+  {/* Projects content */}
+</section>
+```
+
+<Note>
+Smooth scrolling is enabled globally in `src/index.css` with `scroll-behavior: smooth;`
+</Note>
+
+## Project Detail Route (`/project/:id`)
+
+Individual project case studies use **dynamic routing** with URL parameters:
+
+```
+/project/chatverde        → Chat Verde case study
+/project/allegra          → Allegra E-Commerce case study
+/project/directory        → Business Directory case study
+/project/productivity     → Prod System case study
+/project/cashcrafter      → Cash Crafter case study
+```
+
+### URL Parameters
+
+The `:id` parameter matches project IDs from `projects.js`:
+
+```jsx title="ProjectDetail.jsx (excerpt)"
+import { useParams } from 'react-router-dom';
+import { projects } from '../../data/projects';
+
+export default function ProjectDetail() {
+  const { id } = useParams();
+  const project = projects.find((p) => p.id === id);
+
+  if (!project) {
+    return <div>Project not found</div>;
+  }
+
+  return (
+    <div className={styles.page}>
+      <h1>{project.title}</h1>
+      {/* Project details */}
+    </div>
+  );
+}
+```
+
+**How it works:**
+
+1. User clicks a project card on the home page
+2. React Router navigates to `/project/chatverde` (example)
+3. `useParams()` extracts `id = "chatverde"`
+4. Component finds the matching project in `projects` array
+5. Project details render on the page
+
+## Navigation Between Routes
+
+### Linking to Project Details
+
+The `Projects` component uses React Router's `Link` component:
+
+```jsx title="Projects.jsx (excerpt)"
+import { Link } from 'react-router-dom';
+
+function ProjectCard({ id, title, tagline, tech, desc, img }) {
+  return (
+    <Link to={`/project/${id}`} className={styles.card}>
+      <div className={styles.imageContainer}>
+        <img src={img} alt={title} />
+      </div>
+      <div className={styles.content}>
+        <h3>{title}</h3>
+        <p className={styles.tagline}>{tagline}</p>
+        <p className={styles.tech}>{tech}</p>
+        <p className={styles.desc}>{desc}</p>
+      </div>
+    </Link>
+  );
+}
+```
+
+<Tip>
+Use `<Link>` instead of `<a>` for internal navigation. This enables client-side routing without full page reloads.
+</Tip>
+
+### Returning to Home
+
+The `ProjectDetail` component includes navigation back to the home page:
+
+```jsx title="ProjectDetail.jsx (excerpt)"
+import { Link } from 'react-router-dom';
+
+<Link to="/" className={styles.backButton}>
+  <span className="material-icons">arrow_back</span>
+  Back to Home
+</Link>
+```
+
+### Next Project Navigation
+
+Project detail pages include cyclic navigation to the next project:
+
+```jsx title="ProjectDetail.jsx (excerpt)"
+const currentIndex = projects.findIndex((p) => p.id === id);
+const nextIndex = (currentIndex + 1) % projects.length;
+const nextProject = projects[nextIndex];
+
+<Link to={`/project/${nextProject.id}`} className={styles.nextButton}>
+  View Next Project
+  <span className="material-icons">arrow_forward</span>
+</Link>
+```
+
+This creates a continuous browsing experience through all projects.
+
+## Programmatic Navigation
+
+Use `useNavigate` for programmatic routing:
+
+```jsx
+import { useNavigate } from 'react-router-dom';
+
+function SomeComponent() {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    // Navigate to a project
+    navigate('/project/chatverde');
+    
+    // Or go back
+    navigate(-1);
+  };
+
+  return <button onClick={handleClick}>View Project</button>;
+}
+```
+
+## Scroll Restoration
+
+Project detail pages automatically scroll to top on load:
+
+```jsx title="ProjectDetail.jsx (excerpt)"
+import { useEffect } from 'react';
+
+useEffect(() => {
+  window.scrollTo(0, 0);
+}, [id]);
+```
+
+This ensures users start at the top of each case study, even when navigating between projects.
+
+## Adding New Routes
+
+To add a new route to the portfolio:
+
+<Steps>
+  <Step title="Create the component">
+    Create a new component in `src/components/` or at the root of `src/`.
+    
+    ```jsx title="src/components/Blog/Blog.jsx"
+    export default function Blog() {
+      return (
+        <div>
+          <h1>Blog</h1>
+          {/* Blog content */}
+        </div>
+      );
+    }
+    ```
+  </Step>
+  
+  <Step title="Import the component">
+    Import it in `src/App.jsx`:
+    
+    ```jsx
+    import Blog from './components/Blog/Blog';
+    ```
+  </Step>
+  
+  <Step title="Add the route">
+    Add a new `<Route>` inside `<Routes>`:
+    
+    ```jsx
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/project/:id" element={<ProjectDetail />} />
+      <Route path="/blog" element={<Blog />} />
+    </Routes>
+    ```
+  </Step>
+  
+  <Step title="Link to the route">
+    Add a link in the Navbar or elsewhere:
+    
+    ```jsx
+    <Link to="/blog">Blog</Link>
+    ```
+  </Step>
+</Steps>
+
+## Route Patterns
+
+React Router supports various URL patterns:
+
+| Pattern | Example | Matches |
+|---------|---------|---------|
+| Static | `/about` | Only `/about` |
+| Dynamic | `/project/:id` | `/project/123`, `/project/chatverde` |
+| Optional | `/blog/:slug?` | `/blog` and `/blog/my-post` |
+| Wildcard | `/docs/*` | `/docs/a`, `/docs/a/b/c` |
+| Catch-all | `*` | Any unmatched route (404 page) |
+
+### 404 Error Handling
+
+Add a catch-all route for 404 errors:
+
+```jsx
+<Routes>
+  <Route path="/" element={<Home />} />
+  <Route path="/project/:id" element={<ProjectDetail />} />
+  <Route path="*" element={<NotFound />} />
+</Routes>
+```
+
+```jsx title="NotFound.jsx"
+import { Link } from 'react-router-dom';
+
+export default function NotFound() {
+  return (
+    <div>
+      <h1>404 - Page Not Found</h1>
+      <p>The page you're looking for doesn't exist.</p>
+      <Link to="/">Return to Home</Link>
+    </div>
+  );
+}
+```
+
+## Router Configuration
+
+### Browser Router vs. Hash Router
+
+The portfolio uses **BrowserRouter** (clean URLs):
+
+```jsx
+// Current (BrowserRouter)
+import { BrowserRouter as Router } from 'react-router-dom';
+
+// URLs: example.com/project/chatverde
+```
+
+If deploying to a platform that doesn't support clean URLs, use **HashRouter**:
+
+```jsx
+// Alternative (HashRouter)
+import { HashRouter as Router } from 'react-router-dom';
+
+// URLs: example.com/#/project/chatverde
+```
+
+<Warning>
+When using BrowserRouter, configure your hosting platform to redirect all routes to `index.html`. See the [Deployment](/deployment/hosting) guide for platform-specific instructions.
+</Warning>
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Use Link components" icon="link">
+    Always use `<Link>` for internal navigation to enable client-side routing
+  </Card>
+  <Card title="Validate route params" icon="shield-check">
+    Check if dynamic route parameters exist before rendering content
+  </Card>
+  <Card title="Scroll to top" icon="arrow-up">
+    Reset scroll position when navigating between routes
+  </Card>
+  <Card title="Handle 404s gracefully" icon="circle-xmark">
+    Add a catch-all route for better user experience
+  </Card>
+</CardGroup>
+
+## Related Reading
+
+<CardGroup cols={2}>
+  <Card title="Architecture" icon="diagram-project" href="/architecture">
+    Learn about the overall application structure
+  </Card>
+  <Card title="ProjectDetail Component" icon="file-lines" href="/components/project-detail">
+    Deep dive into the project detail page
+  </Card>
+  <Card title="Projects Data" icon="database" href="/customization/projects-data">
+    Understand the project data schema
+  </Card>
+  <Card title="React Router Docs" icon="book-open" href="https://reactrouter.com">
+    Official React Router documentation
+  </Card>
+</CardGroup>

@@ -1,0 +1,198 @@
+---
+title: "Project Schema"
+description: "Complete reference for the project data structure used in the portfolio"
+icon: "brackets-curly"
+---
+
+## Overview
+
+The project schema defines the structure for portfolio projects displayed on the site. All projects are stored in `/src/data/projects.js` as an array of project objects.
+
+## Project Object Structure
+
+Each project in the `projects` array follows this schema:
+
+<ParamField path="id" type="string" required>
+  Unique identifier for the project. Used for routing and references.
+  
+  **Example:** `"chatverde"`, `"allegra"`
+</ParamField>
+
+<ParamField path="title" type="string" required>
+  Display title of the project in uppercase.
+  
+  **Example:** `"CHAT VERDE"`, `"ALLEGRA E-COMMERCE"`
+</ParamField>
+
+<ParamField path="tagline" type="string" required>
+  Short category or type descriptor for the project.
+  
+  **Example:** `"CONVERSATIONAL APP"`, `"E-COMMERCE"`
+</ParamField>
+
+<ParamField path="tech" type="string" required>
+  Tech stack as a formatted string with bullet separators.
+  
+  **Example:** `"F# • .NET • NLP • C#"`, `"React • Vite • Tailwind CSS"`
+</ParamField>
+
+<ParamField path="techList" type="string[]" required>
+  Array of individual technologies used in the project.
+  
+  **Example:** `["F#", ".NET", "NLP", "C#", "Windows Forms"]`
+</ParamField>
+
+<ParamField path="badge" type="string">
+  Optional badge text to highlight special status.
+  
+  **Example:** `""` (empty string for no badge)
+</ParamField>
+
+<ParamField path="desc" type="string" required>
+  Short description highlighting the main achievement or feature (1-2 sentences).
+  
+  **Example:** `"Optimized search performance handling natural language queries with under 100ms response times."`
+</ParamField>
+
+<ParamField path="fullDesc" type="string" required>
+  Extended description providing comprehensive project overview (2-3 sentences).
+  
+  **Example:** `"A conversational console application developed in F# on .NET to query the 'Medicina Verde 100% Natural' product catalog using natural language. It features advanced search capabilities with exact tokenization and intent recognition."`
+</ParamField>
+
+<ParamField path="challenge" type="string" required>
+  Description of the problem or challenge the project addressed.
+  
+  **Example:** `"Finding products in a catalog of 500 items was difficult due to strict spelling requirements and lack of natural language understanding, causing a high match loss for common spelling variations."`
+</ParamField>
+
+<ParamField path="solution" type="string" required>
+  Detailed explanation of how the challenge was solved.
+  
+  **Example:** `"I developed a search engine prioritizing specific fields with tokenization and stopword removal, improving precision by over 10%. I implemented case and accent-insensitive text normalization ending in 0% match loss, and integrated intent recognition to list full categories (e.g., 'shampoos')."`
+</ParamField>
+
+<ParamField path="stats" type="object" required>
+  Project metadata containing role, timeline, and team information.
+  
+  <ParamField path="stats.role" type="string" required>
+    Your role in the project.
+    
+    **Example:** `"Software Engineer"`, `"Full Stack Engineer"`
+  </ParamField>
+  
+  <ParamField path="stats.timeline" type="string" required>
+    When the project was completed.
+    
+    **Example:** `"November 2025"`, `"July 2025"`
+  </ParamField>
+  
+  <ParamField path="stats.team" type="string" required>
+    Team size or location information.
+    
+    **Example:** `"Estelí, Nicaragua"`, `"4 Developers"`
+  </ParamField>
+</ParamField>
+
+<ParamField path="img" type="string" required>
+  Path to the project image (relative to public directory).
+  
+  **Example:** `"/ChatVerde.webp"`, `"/TiendaDeRopaAllegra.webp"`
+</ParamField>
+
+<ParamField path="imgAlt" type="string" required>
+  Accessibility text describing the image.
+  
+  **Example:** `"Console conversational interface"`, `"E-commerce dashboard interface"`
+</ParamField>
+
+## Complete Example
+
+Here's a real project from the portfolio:
+
+```javascript
+{
+  id: 'chatverde',
+  title: 'CHAT VERDE',
+  tagline: 'CONVERSATIONAL APP',
+  tech: 'F# • .NET • NLP • C#',
+  techList: ['F#', '.NET', 'NLP', 'C#', 'Windows Forms'],
+  badge: '',
+  desc: 'Optimized search performance handling natural language queries with under 100ms response times.',
+  fullDesc: 'A conversational console application developed in F# on .NET to query the "Medicina Verde 100% Natural" product catalog using natural language. It features advanced search capabilities with exact tokenization and intent recognition.',
+  challenge: 'Finding products in a catalog of 500 items was difficult due to strict spelling requirements and lack of natural language understanding, causing a high match loss for common spelling variations.',
+  solution: 'I developed a search engine prioritizing specific fields with tokenization and stopword removal, improving precision by over 10%. I implemented case and accent-insensitive text normalization ending in 0% match loss, and integrated intent recognition to list full categories (e.g., "shampoos").',
+  stats: {
+    role: 'Software Engineer',
+    timeline: 'November 2025',
+    team: 'Estelí, Nicaragua'
+  },
+  img: '/ChatVerde.webp',
+  imgAlt: 'Console conversational interface'
+}
+```
+
+## TypeScript Type Definition
+
+For TypeScript users, here's the complete type definition:
+
+```typescript
+interface ProjectStats {
+  role: string;
+  timeline: string;
+  team: string;
+}
+
+interface Project {
+  id: string;
+  title: string;
+  tagline: string;
+  tech: string;
+  techList: string[];
+  badge: string;
+  desc: string;
+  fullDesc: string;
+  challenge: string;
+  solution: string;
+  stats: ProjectStats;
+  img: string;
+  imgAlt: string;
+}
+
+type ProjectsArray = Project[];
+```
+
+## Usage
+
+Import and use projects in your components:
+
+```javascript
+import { projects } from './data/projects';
+
+// Access all projects
+const allProjects = projects;
+
+// Find a specific project by id
+const project = projects.find(p => p.id === 'chatverde');
+
+// Map through projects
+projects.map(project => (
+  <ProjectCard key={project.id} {...project} />
+));
+```
+
+## Adding New Projects
+
+1. Open `/src/data/projects.js`
+2. Add a new object to the `projects` array following the schema above
+3. Ensure all required fields are filled
+4. Add the project image to the `/public` directory
+5. Use WebP format for images for optimal performance
+
+## Best Practices
+
+- Keep `desc` concise and achievement-focused
+- Use metrics in descriptions when possible (e.g., "60% faster", "reduced by 40%")
+- Ensure `imgAlt` is descriptive for accessibility
+- Use consistent capitalization (UPPERCASE for titles)
+- Place newest projects first in the array

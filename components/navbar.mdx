@@ -1,0 +1,305 @@
+---
+title: 'Navbar Component'
+description: 'Fixed navigation header with responsive mobile menu and neobrutalist design'
+icon: 'bars'
+---
+
+## Overview
+
+The **Navbar** component provides a fixed-position navigation header with a responsive mobile menu. It features a neobrutalist design with bold borders, prominent shadows, and animated hamburger menu toggle.
+
+<Note>
+  The Navbar is positioned fixed at the top of the viewport with `z-index: 50`, ensuring it stays above other content while scrolling.
+</Note>
+
+## Component Structure
+
+The Navbar is built with React hooks and CSS Modules:
+
+- **Location**: `src/components/Navbar/Navbar.jsx`
+- **Styles**: `src/components/Navbar/Navbar.module.css`
+- **Dependencies**: Custom `Checkbox` component for mobile menu toggle
+
+## Implementation
+
+### Basic Usage
+
+```jsx
+import Navbar from './components/Navbar/Navbar';
+
+export default function App() {
+  return (
+    <>
+      <Navbar />
+      {/* Rest of your app */}
+    </>
+  );
+}
+```
+
+### Full Component Code
+
+```jsx
+import styles from './Navbar.module.css';
+import { useState } from 'react';
+import Checkbox from './Checkbox';
+
+export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <header className={styles.nav}>
+      <div className={`container ${styles.inner}`}>
+        <a href="#hero" className={styles.logo}>ITZHYPER.PORTFOLIO</a>
+
+        <nav className={styles.links + ' ' + (isOpen ? styles.open : '')}>
+          <a href="#about" className={styles.navLink} onClick={() => setIsOpen(false)} >ABOUT</a>
+          <a download href="/CV_Gustavo_Peralta.pdf" className={styles.outlineBtn} onClick={() => setIsOpen(false)}>DOWNLOAD RESUME</a>
+          <a href="#contact" className={styles.ctaBtn} onClick={() => setIsOpen(false)}>GET IN TOUCH</a>
+        </nav>
+        
+        <div className={styles.menuBtn}>
+          <Checkbox handleMenuToggle={() => setIsOpen(!isOpen)} isOpen={isOpen} />
+        </div>
+      </div>
+    </header>
+  );
+}
+```
+
+## State Management
+
+The component uses a single `isOpen` state to control the mobile menu visibility:
+
+```jsx
+const [isOpen, setIsOpen] = useState(false);
+```
+
+- `isOpen`: Boolean controlling mobile menu open/closed state
+- Mobile menu automatically closes when navigation links are clicked
+- Hamburger icon animates based on `isOpen` state
+
+## Navigation Links
+
+The Navbar includes three main navigation elements:
+
+<Accordion title="About Link">
+  Standard text link styled with `.navLink` class:
+  - Hover effect adds primary color and underline
+  - Smooth scroll to #about section
+  - Font weight: 500
+</Accordion>
+
+<Accordion title="Download Resume Button">
+  Outlined button styled with `.outlineBtn` class:
+  - Downloads CV_Gustavo_Peralta.pdf on click
+  - Neobrutalist border and shadow effect
+  - Hover inverts colors (fills with primary color)
+</Accordion>
+
+<Accordion title="Get In Touch CTA">
+  Primary CTA styled with `.ctaBtn` class:
+  - Filled with primary color by default
+  - Smooth scroll to #contact section
+  - Hover effect removes fill and adds border
+</Accordion>
+
+## CSS Module Styling
+
+### Key Classes
+
+<Tabs>
+  <Tab title=".nav">
+    ```css
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      border-bottom: 2px solid var(--color-primary);
+      background-color: var(--color-bg-dark);
+    }
+    ```
+    Fixed header with primary border bottom and dark background.
+  </Tab>
+  
+  <Tab title=".logo">
+    ```css
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.05em;
+      border: 2px solid var(--color-primary);
+      padding: 0.25rem 0.5rem;
+      box-shadow: var(--shadow-neo-sm);
+      background-color: var(--color-bg-dark);
+      transition: box-shadow 0.15s, transform 0.15s;
+    }
+    ```
+    Neobrutalist boxed logo with shadow that shifts on hover.
+  </Tab>
+  
+  <Tab title=".ctaBtn">
+    ```css
+    .ctaBtn {
+      padding: 0.5rem 1.5rem;
+      background-color: var(--color-primary);
+      color: #ffffff;
+      font-weight: 700;
+      border: 2px solid transparent;
+      box-shadow: var(--shadow-neo-white);
+      transition: all 0.15s;
+    }
+    ```
+    Primary action button with fill and shadow effect.
+  </Tab>
+  
+  <Tab title=".open">
+    ```css
+    .open {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 80px;
+      left: 0;
+      right: 0;
+      background-color: var(--color-bg-dark);
+      border-bottom: 2px solid var(--color-primary);
+      padding: 2rem;
+      gap: 2rem;
+      align-items: center;
+    }
+    ```
+    Mobile menu dropdown overlay positioned below navbar.
+  </Tab>
+</Tabs>
+
+### Responsive Behavior
+
+<CodeGroup>
+```css Desktop (≥768px)
+@media (min-width: 768px) {
+  .links {
+    display: flex; /* Show nav links inline */
+  }
+  
+  .menuBtn {
+    display: none; /* Hide hamburger menu */
+  }
+}
+```
+
+```css Mobile (<768px)
+.links {
+  display: none; /* Hide by default */
+}
+
+.menuBtn {
+  display: flex; /* Show hamburger */
+}
+
+.open {
+  display: flex; /* Show when isOpen=true */
+}
+```
+</CodeGroup>
+
+## Checkbox Component
+
+The mobile menu toggle uses a custom animated hamburger icon:
+
+**Location**: `src/components/Navbar/Checkbox.jsx`
+
+```jsx
+import React from 'react';
+import styled from 'styled-components';
+
+const Checkbox = ({handleMenuToggle, isOpen}) => {
+  return (
+    <StyledWrapper>
+      <label className="burger" htmlFor="burger">
+        <input type="checkbox" id="burger" onChange={handleMenuToggle} checked={isOpen} />
+        <span />
+        <span />
+        <span />
+      </label>
+    </StyledWrapper>
+  );
+}
+```
+
+**Props**:
+- `handleMenuToggle`: Function to toggle menu state
+- `isOpen`: Boolean to control checked state and animation
+
+**Animation**: Three spans rotate into an X when checked (45deg and -45deg rotation).
+
+## Customization
+
+### Change Logo Text
+
+```jsx
+<a href="#hero" className={styles.logo}>YOUR.BRAND</a>
+```
+
+### Add More Navigation Links
+
+```jsx
+<nav className={styles.links + ' ' + (isOpen ? styles.open : '')}>
+  <a href="#about" className={styles.navLink}>ABOUT</a>
+  <a href="#services" className={styles.navLink}>SERVICES</a>
+  <a href="#blog" className={styles.navLink}>BLOG</a>
+  {/* ... */}
+</nav>
+```
+
+### Modify Colors
+
+Update CSS variables in your global styles:
+
+```css
+:root {
+  --color-primary: #00ff88; /* Change accent color */
+  --color-bg-dark: #0a0a0f; /* Change background */
+  --shadow-neo-sm: 4px 4px 0 0 var(--color-primary); /* Adjust shadows */
+}
+```
+
+### Change Navbar Height
+
+```css
+.inner {
+  height: 100px; /* Default: 80px */
+}
+
+.open {
+  top: 100px; /* Match navbar height */
+}
+```
+
+## Design Pattern
+
+The Navbar follows the **neobrutalist design** aesthetic:
+
+- Bold 2px borders in primary color
+- Hard box shadows (no blur)
+- Shadow offset animation on hover (`translate(2px, 2px)`)
+- High contrast colors
+- Uppercase typography
+- Tight letter-spacing (-0.05em)
+
+## Accessibility
+
+- Semantic `<header>` and `<nav>` elements
+- Clickable logo returns to hero section
+- Mobile menu closes on link click for better UX
+- Hamburger menu uses hidden checkbox for keyboard accessibility
+- All interactive elements have hover states
+
+## Performance Notes
+
+- Fixed positioning uses GPU acceleration
+- Transitions limited to transform and box-shadow (performant properties)
+- CSS Modules provide scoped styles with no runtime cost
+- Single state variable minimizes re-renders

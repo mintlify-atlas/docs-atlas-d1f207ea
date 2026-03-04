@@ -1,0 +1,471 @@
+---
+title: 'About Component'
+description: 'Bio section with skills list and decorative image layout'
+icon: 'user'
+---
+
+## Overview
+
+The **About** component showcases a personal bio, technical skills arsenal, and a decorative image. It uses a two-column layout with text content on the left and a stylized image on the right.
+
+<Note>
+  This component is data-driven for the skills list, making it easy to update your technical stack without touching the component logic.
+</Note>
+
+## Component Structure
+
+- **Location**: `src/components/About/About.jsx`
+- **Styles**: `src/components/About/About.module.css`
+- **No props required** - self-contained with internal data
+
+## Implementation
+
+### Basic Usage
+
+```jsx
+import About from './components/About/About';
+
+export default function App() {
+  return (
+    <main>
+      <About />
+    </main>
+  );
+}
+```
+
+### Full Component Code
+
+```jsx
+import styles from './About.module.css';
+
+const skills = [
+    'Java', 'C#', 'JavaScript (ES6+)', 'SQL',
+    'React.js', 'Vite', 'Tailwind CSS', 'HTML5', 'CSS3',
+    'Git', 'GitHub', 'VS Code', 'MySQL Workbench'
+];
+
+export default function About() {
+    return (
+        <section id="about" className={styles.section}>
+            <div className="container">
+                <div className={styles.grid}>
+                    {/* Left: text */}
+                    <div>
+                        <h2 className={styles.headline}>
+                            PURE <br />CODE. <br />NO FLUFF.
+                        </h2>
+                        <p className={styles.body}>
+                            I don't just write code; I engineer solutions. My approach is
+                            rooted in mathematical precision and creative problem-solving. I
+                            believe in software that is fast, reliable, and accessible.
+                        </p>
+                        <div className={styles.skillsBox}>
+                            <h3 className={styles.skillsTitle}>Technical Arsenal</h3>
+                            <ul className={styles.skillsList}>
+                                {skills.map((s) => (
+                                    <li key={s} className={styles.skillItem}>
+                                        <span className={styles.dot} />
+                                        {s}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+
+                    {/* Right: image */}
+                    <div className={styles.imageWrapper}>
+                        <div className={styles.rotatedBg} />
+                        <div className={styles.imageFrame}>
+                            <img
+                                src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800&auto=format&fit=crop"
+                                alt="Minimalist laptop setup on a wooden desk"
+                                className={styles.photo}
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+}
+```
+
+## Layout Structure
+
+### Two-Column Grid
+
+<Tabs>
+  <Tab title="Left Column (Text)">
+    Contains three main elements:
+    
+    1. **Headline**: Bold statement broken into three lines
+    2. **Body Text**: Personal philosophy paragraph
+    3. **Skills Box**: Titled list of technical skills
+  </Tab>
+  
+  <Tab title="Right Column (Image)">
+    Features a decorative image setup:
+    
+    - **Rotated Background**: Geometric decoration behind image
+    - **Image Frame**: Styled container for the photo
+    - **Photo**: Unsplash stock image (easily replaceable)
+  </Tab>
+</Tabs>
+
+## Text Content
+
+### Headline
+
+```jsx
+<h2 className={styles.headline}>
+    PURE <br />CODE. <br />NO FLUFF.
+</h2>
+```
+
+Three-line statement with manual line breaks for visual impact.
+
+### Body Paragraph
+
+```jsx
+<p className={styles.body}>
+    I don't just write code; I engineer solutions. My approach is
+    rooted in mathematical precision and creative problem-solving. I
+    believe in software that is fast, reliable, and accessible.
+</p>
+```
+
+Personal philosophy and approach to software development.
+
+## Skills Arsenal
+
+### Skills Data
+
+Defined as a constant array at the top of the file:
+
+```jsx
+const skills = [
+    'Java', 'C#', 'JavaScript (ES6+)', 'SQL',
+    'React.js', 'Vite', 'Tailwind CSS', 'HTML5', 'CSS3',
+    'Git', 'GitHub', 'VS Code', 'MySQL Workbench'
+];
+```
+
+<Note>
+  Update this array to reflect your current tech stack. The component automatically renders any changes.
+</Note>
+
+### Skills List Rendering
+
+```jsx
+<div className={styles.skillsBox}>
+    <h3 className={styles.skillsTitle}>Technical Arsenal</h3>
+    <ul className={styles.skillsList}>
+        {skills.map((s) => (
+            <li key={s} className={styles.skillItem}>
+                <span className={styles.dot} />
+                {s}
+            </li>
+        ))}
+    </ul>
+</div>
+```
+
+**Features**:
+- Semantic `<ul>` list
+- Each item has a decorative dot (`.dot` span)
+- Automatically adapts to array length
+- Uses skill name as unique key
+
+## Image Section
+
+### Decorative Structure
+
+```jsx
+<div className={styles.imageWrapper}>
+    <div className={styles.rotatedBg} />
+    <div className={styles.imageFrame}>
+        <img
+            src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800&auto=format&fit=crop"
+            alt="Minimalist laptop setup on a wooden desk"
+            className={styles.photo}
+        />
+    </div>
+</div>
+```
+
+<Accordion title="Rotated Background">
+  `.rotatedBg` is an absolutely positioned decorative element (likely rotated via CSS transform) that creates a geometric accent behind the image.
+</Accordion>
+
+<Accordion title="Image Frame">
+  `.imageFrame` provides a styled border/container for the photo, potentially with neobrutalist shadows or borders.
+</Accordion>
+
+<Accordion title="Photo">
+  Uses Unsplash as placeholder. Replace with your own photo:
+  
+  ```jsx
+  <img
+      src="/about-image.webp"
+      alt="Your workspace or portrait"
+      className={styles.photo}
+  />
+  ```
+</Accordion>
+
+## CSS Module Styling
+
+### Key Classes
+
+<CodeGroup>
+```css Grid Layout
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+```
+
+```css Headline
+.headline {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+}
+```
+
+```css Skills List
+.skillsList {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  list-style: none;
+}
+
+.skillItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--color-primary);
+  border-radius: 50%;
+}
+```
+
+```css Image Wrapper
+.imageWrapper {
+  position: relative;
+}
+
+.rotatedBg {
+  position: absolute;
+  /* Transform and positioning for decorative effect */
+}
+
+.imageFrame {
+  position: relative;
+  z-index: 1;
+  border: 2px solid var(--color-primary);
+  box-shadow: var(--shadow-neo);
+}
+```
+</CodeGroup>
+
+## Customization
+
+### Update Skills
+
+```jsx
+const skills = [
+    'TypeScript', 'Python', 'Go',
+    'Next.js', 'GraphQL', 'PostgreSQL',
+    'Docker', 'AWS', 'CI/CD'
+];
+```
+
+### Change Headline
+
+```jsx
+<h2 className={styles.headline}>
+    CLEAN <br />EFFICIENT <br />SCALABLE.
+</h2>
+```
+
+### Modify Body Text
+
+```jsx
+<p className={styles.body}>
+    Your personal statement here. Describe your approach,
+    philosophy, or what drives you as a developer.
+</p>
+```
+
+### Replace Image
+
+```jsx
+<img
+    src="/your-image.jpg"
+    alt="Descriptive alt text"
+    className={styles.photo}
+/>
+```
+
+### Add More Sections
+
+Insert additional content blocks:
+
+```jsx
+<div className={styles.skillsBox}>
+    <h3 className={styles.skillsTitle}>Education</h3>
+    <ul className={styles.skillsList}>
+        <li className={styles.skillItem}>
+            <span className={styles.dot} />
+            B.S. Computer Science
+        </li>
+        <li className={styles.skillItem}>
+            <span className={styles.dot} />
+            AWS Certified Developer
+        </li>
+    </ul>
+</div>
+```
+
+### Change Skills Layout
+
+Switch from grid to single column:
+
+```css
+.skillsList {
+  grid-template-columns: 1fr; /* Single column */
+}
+```
+
+Or three columns:
+
+```css
+.skillsList {
+  grid-template-columns: repeat(3, 1fr);
+}
+```
+
+## Responsive Design
+
+Typical responsive patterns:
+
+<CodeGroup>
+```css Desktop (≥768px)
+.grid {
+  grid-template-columns: 1fr 1fr;
+}
+```
+
+```css Mobile (<768px)
+.grid {
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+.imageWrapper {
+  order: -1; /* Move image above text */
+}
+```
+</CodeGroup>
+
+## Accessibility
+
+- Semantic `<section>` with unique `id="about"`
+- Proper heading hierarchy (h2 for main headline, h3 for subsections)
+- Semantic `<ul>` and `<li>` for skills list
+- Descriptive alt text for image
+- Adequate color contrast for text readability
+
+## Design Patterns
+
+Follows neobrutalist aesthetic:
+
+- **Bold typography**: Large, uppercase headlines
+- **Hard shadows**: No blur on box-shadow
+- **Geometric decoration**: Rotated background elements
+- **High contrast**: Primary color accents on dark background
+- **List bullets**: Custom dot elements instead of default bullets
+
+## Performance
+
+- **No external dependencies**: Pure React component
+- **CSS Modules**: Scoped styles with no runtime cost
+- **Static array**: Skills list doesn't change during runtime
+- **Optimized image**: Could replace Unsplash URL with local WebP for faster load
+
+### Optimize External Image
+
+Replace Unsplash with local asset:
+
+1. Download and convert to WebP
+2. Place in `/public` directory
+3. Update src:
+
+```jsx
+<img
+    src="/about-photo.webp"
+    alt="Workspace photo"
+    className={styles.photo}
+    loading="lazy"
+/>
+```
+
+## Component Variants
+
+### Centered Layout
+
+For single-column centered design:
+
+```jsx
+<section id="about" className={styles.section}>
+    <div className="container">
+        <div className={styles.centered}>
+            <h2 className={styles.headline}>ABOUT ME</h2>
+            <p className={styles.body}>Your bio here...</p>
+            <div className={styles.skillsBox}>
+                {/* Skills */}
+            </div>
+        </div>
+    </div>
+</section>
+```
+
+CSS:
+
+```css
+.centered {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+```
+
+### Skills Grid with Icons
+
+Enhance with technology icons:
+
+```jsx
+{skills.map((s) => (
+    <li key={s} className={styles.skillItem}>
+        <img src={`/icons/${s.toLowerCase()}.svg`} alt="" className={styles.icon} />
+        {s}
+    </li>
+))}
+```
+
+## Related Components
+
+- [Hero](/components/hero): Links to About section via #about anchor
+- [Navbar](/components/navbar): Contains "ABOUT" navigation link
+- [Contact](/components/contact): Often follows the About section

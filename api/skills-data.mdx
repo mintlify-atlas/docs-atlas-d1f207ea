@@ -1,0 +1,167 @@
+---
+title: "Skills Data"
+description: "Reference for the skills array structure and how to manage technical skills"
+icon: "code"
+---
+
+## Overview
+
+The skills list is a simple array of strings defined directly in the About component at `/src/components/About/About.jsx`. It displays your technical proficiencies in the About section.
+
+## Data Structure
+
+The skills are stored as a constant array:
+
+```javascript
+const skills = [
+    'Java', 'C#', 'JavaScript (ES6+)', 'SQL',
+    'React.js', 'Vite', 'Tailwind CSS', 'HTML5', 'CSS3',
+    'Git', 'GitHub', 'VS Code', 'MySQL Workbench'
+];
+```
+
+## Schema
+
+<ParamField path="skills" type="string[]" required>
+  Array of skill names representing your technical arsenal.
+  
+  **Type:** `string[]`
+  
+  **Location:** `/src/components/About/About.jsx:3-7`
+</ParamField>
+
+## Current Skills List
+
+The portfolio currently displays these skills:
+
+### Programming Languages
+- Java
+- C#
+- JavaScript (ES6+)
+- SQL
+
+### Frameworks & Libraries
+- React.js
+- Vite
+- Tailwind CSS
+- HTML5
+- CSS3
+
+### Tools & Platforms
+- Git
+- GitHub
+- VS Code
+- MySQL Workbench
+
+## Categorization
+
+While the current implementation displays skills as a flat list, you can organize them by category for better maintainability:
+
+```javascript
+// Organized by category (optional structure)
+const skillsByCategory = {
+  languages: ['Java', 'C#', 'JavaScript (ES6+)', 'SQL'],
+  frontend: ['React.js', 'Vite', 'Tailwind CSS', 'HTML5', 'CSS3'],
+  tools: ['Git', 'GitHub', 'VS Code', 'MySQL Workbench']
+};
+
+// Flatten for display
+const skills = Object.values(skillsByCategory).flat();
+```
+
+## Adding New Skills
+
+1. Open `/src/components/About/About.jsx`
+2. Locate the `skills` constant array (line 3)
+3. Add your new skill to the array:
+
+```javascript
+const skills = [
+    'Java', 'C#', 'JavaScript (ES6+)', 'SQL',
+    'React.js', 'Vite', 'Tailwind CSS', 'HTML5', 'CSS3',
+    'Git', 'GitHub', 'VS Code', 'MySQL Workbench',
+    'TypeScript', // New skill added
+    'Node.js'      // Another new skill
+];
+```
+
+## Removing Skills
+
+Simply delete the skill string from the array:
+
+```javascript
+const skills = [
+    'Java', 'C#', 'JavaScript (ES6+)', 'SQL',
+    'React.js', 'Vite', 'Tailwind CSS', 'HTML5', 'CSS3',
+    'Git', 'GitHub', 'VS Code'
+    // Removed: 'MySQL Workbench'
+];
+```
+
+## Reordering Skills
+
+Skills appear in the order they're listed in the array. Prioritize your strongest or most relevant skills by placing them first:
+
+```javascript
+const skills = [
+    // Most important first
+    'React.js', 'JavaScript (ES6+)', 'TypeScript',
+    // Secondary skills
+    'Java', 'C#', 'SQL',
+    // Tools last
+    'Git', 'Vite', 'Tailwind CSS'
+];
+```
+
+## Display Format
+
+Each skill is rendered as a list item with a dot indicator:
+
+```jsx
+<ul className={styles.skillsList}>
+  {skills.map((s) => (
+    <li key={s} className={styles.skillItem}>
+      <span className={styles.dot} />
+      {s}
+    </li>
+  ))}
+</ul>
+```
+
+## Best Practices
+
+### Naming Conventions
+- Use proper capitalization (e.g., "JavaScript" not "javascript")
+- Include version info for specificity (e.g., "JavaScript (ES6+)")
+- Use official names (e.g., "React.js" not "React")
+
+### Organization
+- Group related skills together
+- Order by proficiency or relevance
+- Keep the list focused (10-15 skills recommended)
+- Remove outdated or rarely-used technologies
+
+### Maintenance
+- Update regularly as you learn new technologies
+- Remove skills you're no longer using
+- Keep it aligned with your project work
+
+## Advanced: Dynamic Skills
+
+For a more scalable approach, you can create a separate data file:
+
+```javascript
+// src/data/skills.js
+export const skills = [
+  { name: 'React.js', category: 'Frontend', level: 'Advanced' },
+  { name: 'Java', category: 'Backend', level: 'Intermediate' },
+  // ...
+];
+
+// In About.jsx
+import { skills } from '../data/skills';
+
+const skillNames = skills.map(s => s.name);
+```
+
+This allows for future features like skill level indicators or category filtering.

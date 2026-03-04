@@ -1,0 +1,271 @@
+---
+title: "Environment Variables"
+description: "Reference for all environment variables used in the portfolio"
+icon: "key"
+---
+
+## Overview
+
+The portfolio uses environment variables to securely store sensitive configuration data, primarily for the EmailJS integration in the contact form.
+
+**Location:** Create a `.env` file in the project root
+
+<Warning>
+  Never commit `.env` files to version control. The `.env` file should be listed in `.gitignore`.
+</Warning>
+
+## Required Variables
+
+All environment variables in Vite must be prefixed with `VITE_` to be exposed to the client-side code.
+
+### EmailJS Configuration
+
+The contact form requires three EmailJS credentials:
+
+<ParamField path="VITE_EMAILJS_SERVICE_ID" type="string" required>
+  Your EmailJS service identifier.
+  
+  **Used in:** `/src/components/Contact/Contact.jsx:22`
+  
+  **How to get:**
+  1. Sign up at [EmailJS](https://www.emailjs.com/)
+  2. Go to Email Services
+  3. Add a new service (Gmail, Outlook, etc.)
+  4. Copy the Service ID
+  
+  **Example:** `service_abc123xyz`
+</ParamField>
+
+<ParamField path="VITE_EMAILJS_TEMPLATE_ID" type="string" required>
+  Your EmailJS email template identifier.
+  
+  **Used in:** `/src/components/Contact/Contact.jsx:23`
+  
+  **How to get:**
+  1. In EmailJS dashboard, go to Email Templates
+  2. Create a new template or use an existing one
+  3. Configure template with variables: `{{name}}`, `{{email}}`, `{{message}}`
+  4. Copy the Template ID
+  
+  **Example:** `template_xyz789abc`
+</ParamField>
+
+<ParamField path="VITE_EMAILJS_PUBLIC_KEY" type="string" required>
+  Your EmailJS public API key.
+  
+  **Used in:** `/src/components/Contact/Contact.jsx:29`
+  
+  **How to get:**
+  1. In EmailJS dashboard, go to Account
+  2. Find your Public Key (or create one)
+  3. Copy the key
+  
+  **Example:** `Abc123XyzPublicKey`
+</ParamField>
+
+## Setup Instructions
+
+### Step 1: Create .env File
+
+In the project root directory, create a `.env` file:
+
+```bash
+touch .env
+```
+
+### Step 2: Add Variables
+
+Add your EmailJS credentials to the `.env` file:
+
+```bash
+VITE_EMAILJS_SERVICE_ID=your_service_id_here
+VITE_EMAILJS_TEMPLATE_ID=your_template_id_here
+VITE_EMAILJS_PUBLIC_KEY=your_public_key_here
+```
+
+### Step 3: Verify .gitignore
+
+Ensure `.env` is in your `.gitignore`:
+
+```gitignore
+# Environment variables
+.env
+.env.local
+.env.production
+```
+
+### Step 4: Restart Dev Server
+
+After adding environment variables, restart your development server:
+
+```bash
+npm run dev
+```
+
+## .env.example Template
+
+Create a `.env.example` file to help other developers set up the project:
+
+```bash
+# EmailJS Configuration
+# Get your credentials from https://www.emailjs.com/
+VITE_EMAILJS_SERVICE_ID=your_service_id
+VITE_EMAILJS_TEMPLATE_ID=your_template_id
+VITE_EMAILJS_PUBLIC_KEY=your_public_key
+```
+
+This file can be committed to version control as it contains no sensitive data.
+
+## Usage in Code
+
+Access environment variables using `import.meta.env`:
+
+```javascript
+// In src/components/Contact/Contact.jsx
+import emailjs from '@emailjs/browser';
+
+emailjs.send(
+  import.meta.env.VITE_EMAILJS_SERVICE_ID,
+  import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+  {
+    name: name,
+    email: email,
+    message: message,
+  },
+  import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+)
+```
+
+## EmailJS Template Configuration
+
+Your EmailJS template should include these variables:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>New Contact Form Submission</title>
+</head>
+<body>
+  <h2>New message from your portfolio</h2>
+  
+  <p><strong>Name:</strong> {{name}}</p>
+  <p><strong>Email:</strong> {{email}}</p>
+  
+  <h3>Message:</h3>
+  <p>{{message}}</p>
+</body>
+</html>
+```
+
+## Environment-Specific Variables
+
+Vite supports different environment files:
+
+- `.env` - All environments
+- `.env.local` - All environments, ignored by git
+- `.env.development` - Development only
+- `.env.production` - Production only
+
+**Example:**
+
+```bash
+# .env.development
+VITE_EMAILJS_SERVICE_ID=service_dev_123
+
+# .env.production
+VITE_EMAILJS_SERVICE_ID=service_prod_456
+```
+
+## Security Best Practices
+
+<Warning>
+  Client-side environment variables are exposed in the browser. Never store secrets like API keys, database passwords, or private tokens in `VITE_` prefixed variables.
+</Warning>
+
+### Do's
+- Use environment variables for service IDs and public API keys
+- Add `.env` to `.gitignore`
+- Provide `.env.example` for team members
+- Use different credentials for development and production
+- Rotate keys regularly
+
+### Don'ts
+- Never commit `.env` files
+- Don't store database passwords in `VITE_` variables
+- Don't use private API keys on the client side
+- Don't hardcode credentials in source files
+
+## Deployment
+
+### Vercel
+
+Add environment variables in your Vercel project settings:
+
+1. Go to Project Settings > Environment Variables
+2. Add each variable:
+   - `VITE_EMAILJS_SERVICE_ID`
+   - `VITE_EMAILJS_TEMPLATE_ID`
+   - `VITE_EMAILJS_PUBLIC_KEY`
+3. Select environment (Production, Preview, Development)
+4. Redeploy
+
+### Netlify
+
+1. Go to Site Settings > Build & Deploy > Environment
+2. Click "Edit variables"
+3. Add your variables
+4. Trigger a new deploy
+
+### Other Platforms
+
+Most hosting platforms provide a way to set environment variables through their dashboard or CLI. Consult your platform's documentation.
+
+## Troubleshooting
+
+### Variables Not Loading
+
+**Problem:** `import.meta.env.VITE_EMAILJS_SERVICE_ID` is `undefined`
+
+**Solutions:**
+1. Ensure variable has `VITE_` prefix
+2. Restart dev server after adding variables
+3. Check `.env` file is in project root
+4. Verify no syntax errors in `.env` (no quotes needed)
+
+### Contact Form Not Sending
+
+**Problem:** Email not being sent when form is submitted
+
+**Solutions:**
+1. Verify all three EmailJS variables are set
+2. Check EmailJS dashboard for correct IDs
+3. Ensure EmailJS service is active
+4. Check browser console for errors
+5. Verify template variables match: `{{name}}`, `{{email}}`, `{{message}}`
+
+### Building for Production
+
+**Problem:** Variables work in dev but not in production build
+
+**Solutions:**
+1. Set environment variables in your hosting platform
+2. Don't rely on local `.env` for production
+3. Rebuild after setting variables
+
+## Additional Variables
+
+If you add more features requiring environment variables:
+
+```bash
+# Example: Analytics
+VITE_GA_TRACKING_ID=UA-XXXXXXXXX-X
+
+# Example: API endpoints
+VITE_API_BASE_URL=https://api.example.com
+
+# Example: Feature flags
+VITE_ENABLE_DARK_MODE=true
+```
+
+Remember to always prefix with `VITE_` and update `.env.example`.

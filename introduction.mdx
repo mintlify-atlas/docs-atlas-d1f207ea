@@ -1,0 +1,173 @@
+---
+title: Introduction
+description: Welcome to ItzHypeR Portfolio - a modern, high-performance personal portfolio built with React 19 and Vite 7
+---
+
+# Introduction
+
+Welcome to the ItzHypeR Portfolio documentation! This is a modern, high-performance personal portfolio website designed to showcase projects, skills, and professional experience with a premium dark-themed UI.
+
+## What is ItzHypeR Portfolio?
+
+ItzHypeR Portfolio is a blazing-fast, fully responsive portfolio website built with cutting-edge web technologies. It features a premium glassmorphism design, smooth animations, and micro-interactions that create an engaging user experience across all devices.
+
+The portfolio showcases real-world projects including:
+- **Chat Verde** - A conversational app built with F# and .NET
+- **Allegra E-Commerce** - A high-performance e-commerce platform
+- **Business Directory** - An interactive local business search platform
+- **Prod System** - An ERP system for production metrics
+- **Cash Crafter** - A fintech tool for small merchants
+
+## Who is this for?
+
+This portfolio template is perfect for:
+
+- **Developers** looking for a modern, production-ready portfolio template
+- **Engineers** who want to showcase their projects with dedicated detail pages
+- **Tech professionals** seeking a fast, SEO-friendly personal website
+- **Students** who need a professional portfolio to highlight their work
+
+## Key Features
+
+<CardGroup cols={2}>
+  <Card title="Blazing Fast" icon="bolt">
+    Built on Vite with React 19 for near-instant Hot Module Replacement (HMR)
+  </Card>
+  
+  <Card title="Premium UI" icon="palette">
+    Dark-themed design with glassmorphism effects, smooth animations, and micro-interactions
+  </Card>
+  
+  <Card title="Fully Responsive" icon="mobile">
+    Optimized for all screen sizes and devices with mobile-first approach
+  </Card>
+  
+  <Card title="Client-Side Routing" icon="route">
+    Smooth navigation with React Router DOM 7 for seamless page transitions
+  </Card>
+</CardGroup>
+
+### Additional Features
+
+- **Project Detail Pages** - Dedicated pages for each project with challenges, solutions, and tech stack
+- **Contact Section** - Integrated contact form using EmailJS for direct outreach
+- **CV Download** - Direct download link for resume/CV
+- **SEO Optimized** - Built with performance and discoverability in mind
+
+## Tech Stack
+
+The portfolio is built with modern, battle-tested technologies:
+
+| Layer      | Technology                         |
+|------------|-------------------------------------|
+| Framework  | React 19                            |
+| Build Tool | Vite 7                              |
+| Routing    | React Router DOM 7                  |
+| Styling    | CSS Modules + Vanilla CSS           |
+| Linting    | ESLint 9                            |
+| Email      | EmailJS                             |
+
+<Note>
+  The portfolio uses React 19's latest features including the new `createRoot` API and improved concurrent rendering for optimal performance.
+</Note>
+
+## Architecture Overview
+
+The portfolio follows a component-based architecture with clear separation of concerns:
+
+```jsx
+// src/App.jsx - Main routing structure
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+export default function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/project/:id" element={<ProjectDetail />} />
+      </Routes>
+    </Router>
+  );
+}
+```
+
+The home page combines multiple sections:
+- **Hero** - Eye-catching introduction
+- **Marquee** - Scrolling technology showcase
+- **Projects** - Portfolio grid
+- **About** - Personal information
+- **Contact** - Contact form
+- **Footer** - Links and credits
+- **HireMe** - Floating CTA button
+
+## Project Structure
+
+The codebase is organized for maintainability and scalability:
+
+```
+portfolio/
+├── public/             # Static assets (images, CV, etc.)
+├── src/
+│   ├── assets/         # Internal assets
+│   ├── components/     # UI components
+│   │   ├── About/
+│   │   ├── Contact/
+│   │   ├── Footer/
+│   │   ├── Hero/
+│   │   ├── HireMe/
+│   │   ├── Marquee/
+│   │   ├── Navbar/
+│   │   ├── ProjectDetail/
+│   │   └── Projects/
+│   ├── data/
+│   │   └── projects.js  # Project data source
+│   ├── App.jsx
+│   └── main.jsx
+├── index.html
+├── vite.config.js
+└── package.json
+```
+
+## Performance Benefits
+
+<Tip>
+  Vite's development server provides near-instant server start and lightning-fast HMR, making development a breeze even on large projects.
+</Tip>
+
+Key performance features:
+- **Fast Development** - Vite's native ESM-based dev server starts instantly
+- **Optimized Production** - Tree-shaking and code-splitting out of the box
+- **Modern Output** - Targets modern browsers for smaller bundle sizes
+- **Asset Optimization** - Automatic image and CSS optimization
+
+## Next Steps
+
+Ready to get started? Here's what to do next:
+
+<CardGroup cols={2}>
+  <Card title="Quick Start" icon="rocket" href="/quickstart">
+    Get your portfolio running in under 5 minutes
+  </Card>
+  
+  <Card title="Installation" icon="download" href="/installation">
+    Detailed installation and setup guide
+  </Card>
+  
+  <Card title="Customization" icon="paint-brush" href="/customization/content">
+    Learn how to customize the portfolio for your needs
+  </Card>
+  
+  <Card title="Deployment" icon="cloud-arrow-up" href="/deployment/build">
+    Deploy your portfolio to production
+  </Card>
+</CardGroup>
+
+## License
+
+This project is open source and available under the MIT License. Feel free to use it for your own portfolio!
+
+---
+
+<Info>
+  Have questions? Check out the [FAQ](/introduction) or reach out through the contact form on the live portfolio.
+</Info>

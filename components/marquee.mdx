@@ -1,0 +1,362 @@
+---
+title: 'Marquee Component'
+description: 'An animated scrolling marquee displaying tech stack with infinite loop animation'
+icon: 'bolt'
+---
+
+## Overview
+
+The Marquee component creates an eye-catching, infinitely scrolling banner that showcases your tech stack. It features a slanted design with bold typography and smooth CSS animations.
+
+## Features
+
+- Infinite horizontal scroll animation
+- Duplicated tracks for seamless looping
+- Slanted container design (-1.5deg rotation)
+- Tech stack with icon separators
+- Fully customizable tech list
+- Pure CSS animation (no JavaScript)
+- Responsive typography
+
+## Implementation
+
+The component is located at `src/components/Marquee/Marquee.jsx`:
+
+```jsx
+import styles from './Marquee.module.css';
+
+const techs = ['React', 'JS', 'Node.js', 'Java', 'C#', 'MySQL'];
+
+function Track() {
+    return (
+        <span className={styles.track}>
+            {techs.map((t, i) => (
+                <span key={`${t}-${i}`} className={styles.item}>
+                    {t}
+                    <span className={`material-icons ${styles.icon}`}>bolt</span>
+                </span>
+            ))}
+        </span>
+    );
+}
+
+export default function Marquee() {
+    return (
+        <div className={styles.wrapper}>
+            <div className={`${styles.scroll} animate-marquee`}>
+                <Track />
+                <Track />
+                <Track />
+                <Track />
+            </div>
+        </div>
+    );
+}
+```
+
+## How It Works
+
+### Tech Stack Array
+
+The component uses a simple array to define the technologies:
+
+```jsx
+const techs = ['React', 'JS', 'Node.js', 'Java', 'C#', 'MySQL'];
+```
+
+### Track Component
+
+The `Track` function creates a single track of technologies with icon separators:
+
+```jsx
+function Track() {
+    return (
+        <span className={styles.track}>
+            {techs.map((t, i) => (
+                <span key={`${t}-${i}`} className={styles.item}>
+                    {t}
+                    <span className={`material-icons ${styles.icon}`}>bolt</span>
+                </span>
+            ))}
+        </span>
+    );
+}
+```
+
+### Multiple Tracks for Seamless Loop
+
+Four `<Track />` components are rendered to ensure the animation never shows gaps:
+
+```jsx
+<Track />
+<Track />
+<Track />
+<Track />
+```
+
+## CSS Module Styling
+
+### Wrapper with Slanted Design
+
+```css
+.wrapper {
+    width: 110%;
+    margin-left: -5%;
+    background-color: var(--color-primary);
+    border-top: 4px solid #000000;
+    border-bottom: 4px solid #000000;
+    overflow: hidden;
+    padding: 1.25rem 0;
+    transform: rotate(-1.5deg);
+    position: relative;
+    z-index: 20;
+}
+```
+
+Key features:
+- 110% width extends beyond viewport
+- Negative margin centers the extended width
+- -1.5deg rotation creates dynamic angle
+- Overflow hidden prevents content spillage
+
+### Scroll Container
+
+```css
+.scroll {
+    white-space: nowrap;
+    display: flex;
+}
+```
+
+Prevents text wrapping and uses flexbox for horizontal layout.
+
+### Track and Items
+
+```css
+.track {
+    display: inline-flex;
+    align-items: center;
+    padding: 0;
+}
+
+.item {
+    display: inline-flex;
+    align-items: center;
+    font-size: clamp(1.5rem, 4vw, 3.5rem);
+    font-weight: 700;
+    color: #ffffff;
+    text-transform: uppercase;
+}
+
+.icon {
+    color: #ffffff;
+    margin: 0 1.5rem;
+}
+```
+
+### Animation
+
+The animation is defined globally in `index.css`:
+
+```css
+@keyframes marquee {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.animate-marquee {
+    animation: marquee 20s linear infinite;
+}
+```
+
+The `-50%` transform creates a perfect loop when combined with duplicated tracks.
+
+## Customization
+
+### Update Tech Stack
+
+Modify the `techs` array in `Marquee.jsx`:
+
+```jsx
+const techs = [
+    'TypeScript', 
+    'Vue.js', 
+    'Python', 
+    'Django', 
+    'PostgreSQL', 
+    'Docker'
+];
+```
+
+### Change Icon
+
+Replace the Material Icon name:
+
+```jsx
+<span className={`material-icons ${styles.icon}`}>
+    star  {/* or any other Material Icon name */}
+</span>
+```
+
+### Adjust Animation Speed
+
+Modify the animation duration in `index.css`:
+
+```css
+.animate-marquee {
+    animation: marquee 15s linear infinite; /* Faster */
+}
+```
+
+Or:
+
+```css
+.animate-marquee {
+    animation: marquee 30s linear infinite; /* Slower */
+}
+```
+
+### Change Background Color
+
+Update the wrapper background in `Marquee.module.css`:
+
+```css
+.wrapper {
+    background-color: #your-color;
+}
+```
+
+Or use a different CSS variable:
+
+```css
+.wrapper {
+    background-color: var(--neon-violet);
+}
+```
+
+### Adjust Rotation Angle
+
+Change the slant degree:
+
+```css
+.wrapper {
+    transform: rotate(-2deg); /* More dramatic angle */
+}
+```
+
+Or remove rotation entirely:
+
+```css
+.wrapper {
+    transform: rotate(0deg);
+    width: 100%;
+    margin-left: 0;
+}
+```
+
+### Modify Typography
+
+Adjust font size range:
+
+```css
+.item {
+    font-size: clamp(1rem, 3vw, 2.5rem); /* Smaller */
+}
+```
+
+### Change Border Style
+
+```css
+.wrapper {
+    border-top: 2px solid #ffffff;
+    border-bottom: 2px solid #ffffff;
+}
+```
+
+### Adjust Padding/Height
+
+```css
+.wrapper {
+    padding: 2rem 0; /* More vertical space */
+}
+```
+
+### Add Gradient Background
+
+```css
+.wrapper {
+    background: linear-gradient(135deg, var(--color-primary), var(--neon-violet));
+}
+```
+
+## Usage in App
+
+Import and place the Marquee component anywhere in your layout:
+
+```jsx
+import Marquee from './components/Marquee/Marquee';
+
+function App() {
+    return (
+        <>
+            <Navbar />
+            <Hero />
+            <Marquee />  {/* Tech stack showcase */}
+            <About />
+            <Projects />
+            <Contact />
+            <Footer />
+        </>
+    );
+}
+```
+
+## Performance Considerations
+
+- Pure CSS animation (GPU accelerated)
+- No JavaScript calculations during animation
+- Uses `transform` for optimal performance
+- Linear timing function for smooth, consistent speed
+
+## Accessibility
+
+- Decorative component (primarily visual)
+- Consider adding `aria-label` for screen readers:
+
+```jsx
+<div className={styles.wrapper} aria-label="Technologies: React, JavaScript, Node.js, Java, C#, MySQL">
+```
+
+- Respects `prefers-reduced-motion`:
+
+```css
+@media (prefers-reduced-motion: reduce) {
+    .animate-marquee {
+        animation: none;
+    }
+}
+```
+
+## Material Icons Dependency
+
+This component requires Material Icons. Ensure you have it loaded in your `index.html`:
+
+```html
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" 
+      rel="stylesheet">
+```
+
+## CSS Variables Used
+
+- `--color-primary` - Marquee background color
+
+## Browser Support
+
+- Modern browsers with CSS animations support
+- Flexbox support required
+- CSS transforms support required
+- CSS custom properties support required

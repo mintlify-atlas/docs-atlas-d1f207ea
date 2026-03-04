@@ -1,0 +1,362 @@
+---
+title: 'Styling & Themes'
+description: 'Customize colors, themes, glassmorphism effects, and animations in your portfolio'
+---
+
+## Overview
+
+The portfolio uses **CSS Modules** for component-scoped styling and CSS custom properties (CSS variables) for theme management. This approach provides both flexibility and maintainability.
+
+## CSS Modules Architecture
+
+Each component has its own `.module.css` file that is imported and scoped to that component:
+
+```jsx Hero.jsx
+import styles from './Hero.module.css';
+
+export default function Hero() {
+  return (
+    <section className={styles.hero}>
+      <h1 className={styles.headline}>BUILDING ROBUST SYSTEMS</h1>
+    </section>
+  );
+}
+```
+
+<Note>
+CSS Modules automatically scope class names to components, preventing style conflicts. The class `.hero` in `Hero.module.css` won't clash with `.hero` in other files.
+</Note>
+
+## Color Theme System
+
+All colors are defined as CSS custom properties in `src/index.css`:
+
+```css index.css
+:root {
+  /* Dark Amethyst palette */
+  --dark-amethyst: #23003a;
+  --dark-amethyst-2: #270040;
+  --dark-amethyst-3: #340452;
+  --dark-amethyst-4: #3d0c5c;
+  --indigo: #451365;
+  --dark-amethyst-5: #4c1c62;
+  --dark-amethyst-6: #41005b;
+  --neon-violet: #bf40ff;
+
+  /* Semantic aliases */
+  --color-primary: var(--indigo);
+  --color-bg-dark: #0D0D0D;
+  --color-bg-mid: var(--dark-amethyst-2);
+  --color-black-cherry: var(--dark-amethyst);
+  --color-accent: var(--dark-amethyst-5);
+  --color-neon: var(--neon-violet);
+}
+```
+
+### Customizing Your Color Theme
+
+<Steps>
+  <Step title="Open index.css">
+    Navigate to `src/index.css` in your source directory.
+  </Step>
+  
+  <Step title="Modify Color Variables">
+    Change the hex values in the `:root` selector. For example, to switch to a blue theme:
+    
+    ```css
+    :root {
+      --color-primary: #0066ff;
+      --color-neon: #00ccff;
+      --color-bg-mid: #001a33;
+      --color-black-cherry: #000d1a;
+    }
+    ```
+  </Step>
+  
+  <Step title="Test Your Changes">
+    Run `npm run dev` and check that colors update across all components.
+  </Step>
+</Steps>
+
+<Warning>
+Keep sufficient contrast between text and background colors to maintain accessibility. Aim for at least a 4.5:1 contrast ratio for body text.
+</Warning>
+
+## Shadow System
+
+The portfolio uses a neomorphic shadow system for depth:
+
+```css index.css
+:root {
+  --shadow-neo: 4px 4px 0px 0px var(--color-primary);
+  --shadow-neo-sm: 2px 2px 0px 0px var(--color-primary);
+  --shadow-neo-white: 4px 4px 0px 0px #ffffff;
+  --shadow-neo-green: 6px 6px 0px 0px var(--neon-violet);
+  --shadow-neo-black: 6px 6px 0px 0px var(--dark-amethyst);
+  --shadow-neo-purple: 6px 6px 0px 0px var(--neon-violet);
+}
+```
+
+Example usage in component:
+
+```css Hero.module.css
+.descBox {
+  border: 2px solid var(--color-primary);
+  box-shadow: var(--shadow-neo);
+}
+
+.imageCard {
+  box-shadow: var(--shadow-neo-green);
+}
+```
+
+## Glassmorphism Effects
+
+The portfolio uses overlay layers to create glassmorphic and cyberpunk effects on the hero image:
+
+```css Hero.module.css
+.gridOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  background-image: url("data:image/svg+xml;base64,...");
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+.colorOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  background-color: rgba(173, 40, 49, 0.35);
+  mix-blend-mode: color;
+  pointer-events: none;
+}
+
+.scanlines {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  background-image: linear-gradient(
+    transparent 50%, 
+    rgba(0, 0, 0, 0.5) 50%
+  );
+  background-size: 100% 4px;
+  opacity: 0.2;
+  pointer-events: none;
+}
+```
+
+### Customizing Glassmorphism
+
+To adjust the glassmorphism effect intensity:
+
+<CodeGroup>
+```css Stronger Effect
+.colorOverlay {
+  background-color: rgba(173, 40, 49, 0.6); /* Increase alpha */
+  opacity: 0.8;
+}
+
+.scanlines {
+  opacity: 0.4; /* More visible scanlines */
+}
+```
+
+```css Subtle Effect
+.colorOverlay {
+  background-color: rgba(173, 40, 49, 0.15); /* Decrease alpha */
+  opacity: 0.3;
+}
+
+.scanlines {
+  opacity: 0.1; /* Less visible scanlines */
+}
+```
+</CodeGroup>
+
+## Animations & Transitions
+
+### Button Hover Effects
+
+Buttons use a "push down" animation on hover:
+
+```css Hero.module.css
+.btnPrimary {
+  background-color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+  box-shadow: var(--shadow-neo-white);
+  transition: all 0.15s;
+}
+
+.btnPrimary:hover {
+  box-shadow: none;
+  transform: translate(4px, 4px);
+}
+```
+
+### Marquee Animation
+
+The skills marquee uses infinite scroll:
+
+```css index.css
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 20s linear infinite;
+}
+```
+
+Adjust animation speed by changing the duration:
+
+```css
+/* Faster */
+.animate-marquee {
+  animation: marquee 10s linear infinite;
+}
+
+/* Slower */
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+```
+
+### Image Card Hover
+
+The hero image card has a lift effect:
+
+```css Hero.module.css
+.imageCard {
+  box-shadow: var(--shadow-neo-green);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.imageCard:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 8px 8px 0px 0px var(--color-neon);
+}
+```
+
+## Font Customization
+
+The portfolio uses **Space Grotesk** from Google Fonts, loaded in `index.html`:
+
+```html index.html
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" 
+  href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap">
+```
+
+Set globally in `index.css`:
+
+```css index.css
+:root {
+  --font-display: 'Space Grotesk', sans-serif;
+}
+
+body {
+  font-family: var(--font-display);
+}
+```
+
+### Changing the Font
+
+<Steps>
+  <Step title="Choose a New Font">
+    Visit [Google Fonts](https://fonts.google.com) and select a font.
+  </Step>
+  
+  <Step title="Update index.html">
+    Replace the Google Fonts link:
+    
+    ```html
+    <link rel="stylesheet" 
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    ```
+  </Step>
+  
+  <Step title="Update CSS Variable">
+    Change the font family in `src/index.css`:
+    
+    ```css
+    :root {
+      --font-display: 'Inter', sans-serif;
+    }
+    ```
+  </Step>
+</Steps>
+
+## Background Patterns
+
+Utility classes for grid patterns:
+
+```css index.css
+.bg-grid-pattern {
+  background-image:
+    linear-gradient(to right, rgba(69, 19, 101, 0.35) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(69, 19, 101, 0.35) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.tech-overlay {
+  background-image:
+    linear-gradient(rgba(173, 40, 49, 0.15) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(173, 40, 49, 0.15) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+```
+
+Customize grid density by adjusting `background-size`:
+
+```css
+/* Denser grid */
+.bg-grid-pattern {
+  background-size: 20px 20px;
+}
+
+/* Wider grid */
+.bg-grid-pattern {
+  background-size: 60px 60px;
+}
+```
+
+## Responsive Design
+
+The portfolio uses CSS custom properties with media queries:
+
+```css Hero.module.css
+.headline {
+  font-size: clamp(3.5rem, 10vw, 7rem);
+  line-height: 0.9;
+}
+
+@media (min-width: 1024px) {
+  .inner {
+    flex-direction: row;
+    gap: 4rem;
+  }
+}
+```
+
+<Note>
+The `clamp()` function creates fluid typography that scales smoothly between a minimum and maximum size.
+</Note>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Content Customization" icon="pen" href="/customization/content">
+    Update text, links, and personal information
+  </Card>
+  <Card title="Projects Data" icon="folder" href="/customization/projects-data">
+    Add and manage your portfolio projects
+  </Card>
+</CardGroup>

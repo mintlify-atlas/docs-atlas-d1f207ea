@@ -1,0 +1,309 @@
+---
+title: "Vite Configuration"
+description: "Complete reference for the Vite build configuration"
+icon: "bolt"
+---
+
+## Overview
+
+The portfolio uses Vite as its build tool and development server. The configuration is minimal and leverages Vite's smart defaults for optimal React development.
+
+**Location:** `/vite.config.js`
+
+## Current Configuration
+
+Here's the complete Vite configuration used in the project:
+
+```javascript
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [react()],
+})
+```
+
+## Configuration Options
+
+<ParamField path="plugins" type="Plugin[]" required>
+  Array of Vite plugins to enable additional functionality.
+  
+  Currently configured with:
+  - `@vitejs/plugin-react` - Official Vite plugin for React support
+  
+  **Version:** `^5.1.1`
+</ParamField>
+
+## Plugin: @vitejs/plugin-react
+
+The React plugin provides:
+
+- Fast Refresh (Hot Module Replacement for React)
+- JSX/TSX transformation
+- React DevTools integration
+- Automatic JSX runtime
+
+### Plugin Configuration
+
+The plugin is used with default settings. You can customize it:
+
+```javascript
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [
+    react({
+      // Enable Fast Refresh (default: true)
+      fastRefresh: true,
+      
+      // Babel plugins (optional)
+      babel: {
+        plugins: ['@babel/plugin-proposal-decorators']
+      },
+      
+      // Include/exclude files (optional)
+      include: '**/*.jsx',
+    })
+  ],
+})
+```
+
+## Common Customizations
+
+### Change Server Port
+
+```javascript
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    port: 3000,
+    open: true // Auto-open browser
+  }
+})
+```
+
+### Add Path Aliases
+
+```javascript
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import path from 'path'
+
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+      '@components': path.resolve(__dirname, './src/components'),
+      '@data': path.resolve(__dirname, './src/data')
+    }
+  }
+})
+```
+
+Then import like:
+
+```javascript
+import { projects } from '@data/projects'
+import Header from '@components/Header/Header'
+```
+
+### Configure Build Output
+
+```javascript
+export default defineConfig({
+  plugins: [react()],
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    sourcemap: true,
+    minify: 'terser'
+  }
+})
+```
+
+### Add Environment Variables Prefix
+
+```javascript
+export default defineConfig({
+  plugins: [react()],
+  envPrefix: 'VITE_' // Default, can customize
+})
+```
+
+### Enable CSS Preprocessing
+
+```javascript
+export default defineConfig({
+  plugins: [react()],
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@import "./src/styles/variables.scss";`
+      }
+    },
+    modules: {
+      localsConvention: 'camelCase'
+    }
+  }
+})
+```
+
+### Configure for Production
+
+```javascript
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig(({ command }) => {
+  const config = {
+    plugins: [react()],
+  }
+  
+  if (command === 'build') {
+    config.build = {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            vendor: ['react', 'react-dom', 'react-router-dom']
+          }
+        }
+      }
+    }
+  }
+  
+  return config
+})
+```
+
+## Available Scripts
+
+These npm scripts use the Vite configuration:
+
+<ParamField path="dev" type="script">
+  Start development server with host exposure
+  
+  ```bash
+  npm run dev
+  ```
+  
+  Runs: `vite --host`
+</ParamField>
+
+<ParamField path="build" type="script">
+  Build for production
+  
+  ```bash
+  npm run build
+  ```
+  
+  Runs: `vite build`
+  
+  Output: `/dist` directory
+</ParamField>
+
+<ParamField path="preview" type="script">
+  Preview production build locally
+  
+  ```bash
+  npm run preview
+  ```
+  
+  Runs: `vite preview`
+</ParamField>
+
+## Dependencies
+
+Vite-related packages in the project:
+
+```json
+{
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.1.1",
+    "vite": "^7.3.1"
+  }
+}
+```
+
+## Performance Optimization
+
+### Code Splitting
+
+Vite automatically code-splits dynamic imports:
+
+```javascript
+// Lazy load components
+const Projects = lazy(() => import('./components/Projects/Projects'))
+```
+
+### Asset Optimization
+
+```javascript
+export default defineConfig({
+  plugins: [react()],
+  build: {
+    rollupOptions: {
+      output: {
+        assetFileNames: 'assets/[name].[hash][extname]'
+      }
+    },
+    chunkSizeWarningLimit: 1000
+  }
+})
+```
+
+### Enable Compression
+
+```bash
+npm install vite-plugin-compression -D
+```
+
+```javascript
+import compression from 'vite-plugin-compression'
+
+export default defineConfig({
+  plugins: [
+    react(),
+    compression({ algorithm: 'gzip' })
+  ]
+})
+```
+
+## Troubleshooting
+
+### Clear Cache
+
+```bash
+rm -rf node_modules/.vite
+npm run dev
+```
+
+### Port Already in Use
+
+Change the port in `vite.config.js` or kill the process:
+
+```bash
+lsof -ti:5173 | xargs kill -9
+```
+
+### Slow HMR
+
+Exclude large directories:
+
+```javascript
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    watch: {
+      ignored: ['**/node_modules/**', '**/dist/**']
+    }
+  }
+})
+```
+
+## Official Documentation
+
+For more advanced configurations, see:
+- [Vite Configuration Reference](https://vite.dev/config/)
+- [@vitejs/plugin-react Documentation](https://github.com/vitejs/vite-plugin-react)

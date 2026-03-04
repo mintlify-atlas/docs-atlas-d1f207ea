@@ -1,0 +1,422 @@
+---
+title: Installation
+description: Detailed installation guide with prerequisites, setup steps, and troubleshooting
+---
+
+# Installation
+
+This guide provides detailed instructions for installing and setting up the ItzHypeR Portfolio on your local machine.
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed on your system:
+
+### Required Software
+
+<CardGroup cols={2}>
+  <Card title="Node.js" icon="node-js">
+    **Version 18 or higher** required
+    
+    Download from [nodejs.org](https://nodejs.org/)
+  </Card>
+  
+  <Card title="npm" icon="box">
+    **Version 9 or higher** required
+    
+    Included with Node.js installation
+  </Card>
+</CardGroup>
+
+### Verify Your Installation
+
+Check that you have the correct versions installed:
+
+```bash
+node --version
+# Should output: v18.0.0 or higher
+
+npm --version
+# Should output: 9.0.0 or higher
+```
+
+<Warning>
+  Using an older version of Node.js may cause compatibility issues with React 19 and Vite 7. Please upgrade to Node.js v18 or higher.
+</Warning>
+
+### Optional but Recommended
+
+- **Git** - For cloning the repository and version control
+- **VS Code** or **Cursor** - Recommended code editors with excellent React support
+- **React Developer Tools** - Browser extension for debugging
+
+## Step-by-Step Installation
+
+### 1. Install Node.js and npm
+
+If you don't have Node.js installed:
+
+<Steps>
+  <Step title="Download Node.js">
+    Visit [nodejs.org](https://nodejs.org/) and download the LTS version for your operating system.
+
+    <Tip>
+      The LTS (Long Term Support) version is recommended for stability.
+    </Tip>
+  </Step>
+
+  <Step title="Run the Installer">
+    Run the downloaded installer and follow the prompts. npm is included automatically with Node.js.
+  </Step>
+
+  <Step title="Verify Installation">
+    Open a new terminal window and verify:
+
+    ```bash
+    node --version
+    npm --version
+    ```
+
+    <Note>
+      Make sure to open a **new** terminal window after installation to ensure environment variables are loaded.
+    </Note>
+  </Step>
+</Steps>
+
+### 2. Clone the Repository
+
+You have two options for obtaining the source code:
+
+#### Option A: Clone via HTTPS (Recommended)
+
+```bash
+git clone https://github.com/xItzHypeR/portfolio.git
+cd portfolio
+```
+
+#### Option B: Clone via SSH
+
+```bash
+git clone git@github.com:xItzHypeR/portfolio.git
+cd portfolio
+```
+
+#### Option C: Download ZIP
+
+1. Visit the [GitHub repository](https://github.com/xItzHypeR/portfolio)
+2. Click the green "Code" button
+3. Select "Download ZIP"
+4. Extract the ZIP file
+5. Navigate to the extracted folder in your terminal
+
+### 3. Install Project Dependencies
+
+Once inside the project directory, install all required dependencies:
+
+<CodeGroup>
+  ```bash npm
+  npm install
+  ```
+
+  ```bash yarn
+  # If you prefer Yarn
+  yarn install
+  ```
+
+  ```bash pnpm
+  # If you prefer pnpm
+  pnpm install
+  ```
+</CodeGroup>
+
+This command installs all dependencies listed in `package.json`:
+
+#### Core Dependencies
+
+```json
+{
+  "dependencies": {
+    "@emailjs/browser": "^4.4.1",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.13.1",
+    "styled-components": "^6.3.11"
+  }
+}
+```
+
+#### Development Dependencies
+
+```json
+{
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "globals": "^16.5.0",
+    "vite": "^7.3.1"
+  }
+}
+```
+
+<Info>
+  The installation process typically takes 30-90 seconds depending on your internet connection and system performance.
+</Info>
+
+### 4. Verify the Installation
+
+After installation completes, verify everything is set up correctly:
+
+```bash
+# Check that node_modules was created
+ls -la
+# You should see a node_modules/ directory
+
+# Verify package.json exists
+cat package.json
+```
+
+### 5. Start the Development Server
+
+Launch the development server:
+
+```bash
+npm run dev
+```
+
+Expected output:
+
+```bash
+VITE v7.3.1  ready in 234 ms
+
+➜  Local:   http://localhost:5173/
+➜  Network: http://192.168.1.100:5173/
+➜  press h + enter to show help
+```
+
+<Tip>
+  The development server automatically opens on an available port. If 5173 is taken, Vite will try the next available port.
+</Tip>
+
+### 6. Open in Browser
+
+Navigate to the local URL in your browser:
+
+```
+http://localhost:5173
+```
+
+You should see the portfolio homepage load successfully.
+
+## Environment Setup
+
+### IDE Configuration
+
+For the best development experience, we recommend configuring your IDE:
+
+#### VS Code
+
+Install these recommended extensions:
+
+- **ES7+ React/Redux/React-Native snippets** - Code snippets
+- **ESLint** - Code linting
+- **Prettier** - Code formatting
+- **Auto Rename Tag** - Automatically rename paired HTML/JSX tags
+- **Path Intellisense** - Autocomplete file paths
+
+Create a `.vscode/settings.json` file:
+
+```json
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact"
+  ],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
+}
+```
+
+#### Cursor
+
+Cursor comes with excellent React support out of the box. Enable:
+
+- ESLint integration
+- Auto-import suggestions
+- JSX syntax highlighting
+
+### Git Configuration (Optional)
+
+If you plan to maintain your own version:
+
+```bash
+# Remove the original remote
+git remote remove origin
+
+# Add your own repository
+git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
+
+# Create a new branch for your changes
+git checkout -b customize-portfolio
+```
+
+## Troubleshooting
+
+### Common Issues and Solutions
+
+<AccordionGroup>
+  <Accordion title="Node version is too old">
+    **Problem:** Error message about incompatible Node.js version
+
+    **Solution:** 
+    ```bash
+    # Using nvm (Node Version Manager)
+    nvm install 18
+    nvm use 18
+
+    # Or download and install from nodejs.org
+    ```
+  </Accordion>
+
+  <Accordion title="npm install fails with EACCES error">
+    **Problem:** Permission denied errors during installation
+
+    **Solution:**
+    ```bash
+    # Fix npm permissions (Linux/macOS)
+    sudo chown -R $USER:$GROUP ~/.npm
+    sudo chown -R $USER:$GROUP ~/.config
+
+    # Or use npx instead
+    npx npm install
+    ```
+  </Accordion>
+
+  <Accordion title="Port 5173 already in use">
+    **Problem:** Dev server can't start because port is occupied
+
+    **Solution:**
+    ```bash
+    # Find and kill the process using the port
+    lsof -ti:5173 | xargs kill -9
+
+    # Or use a different port
+    npm run dev -- --port 3000
+    ```
+  </Accordion>
+
+  <Accordion title="Module not found errors">
+    **Problem:** Import errors or missing module errors
+
+    **Solution:**
+    ```bash
+    # Clear cache and reinstall
+    rm -rf node_modules package-lock.json
+    npm install
+
+    # Or clear npm cache
+    npm cache clean --force
+    npm install
+    ```
+  </Accordion>
+
+  <Accordion title="Vite HMR not working">
+    **Problem:** Changes not reflecting in the browser
+
+    **Solution:**
+    - Hard refresh the browser (Ctrl+Shift+R or Cmd+Shift+R)
+    - Check browser console for errors
+    - Restart the dev server
+    - Check that you're editing files inside the `src/` directory
+  </Accordion>
+
+  <Accordion title="ESLint errors on startup">
+    **Problem:** ESLint configuration errors
+
+    **Solution:**
+    ```bash
+    # Verify ESLint config
+    npx eslint --version
+
+    # Run linting manually
+    npm run lint
+
+    # Fix auto-fixable issues
+    npm run lint -- --fix
+    ```
+  </Accordion>
+</AccordionGroup>
+
+### System-Specific Issues
+
+#### Windows
+
+<Warning>
+  On Windows, use PowerShell or Git Bash instead of Command Prompt for better compatibility with npm scripts.
+</Warning>
+
+```powershell
+# If you encounter execution policy errors
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+```
+
+#### macOS
+
+If you encounter certificate errors:
+
+```bash
+# Update npm to latest
+npm install -g npm@latest
+```
+
+#### Linux
+
+If you have permission issues:
+
+```bash
+# Use nvm instead of system Node.js
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+nvm install 18
+nvm use 18
+```
+
+## Next Steps
+
+Now that you have the portfolio installed and running:
+
+<CardGroup cols={2}>
+  <Card title="Quick Start" icon="rocket" href="/quickstart">
+    Jump right in with the quick start guide
+  </Card>
+  
+  <Card title="Project Structure" icon="folder-tree" href="/project-structure">
+    Understand the codebase organization
+  </Card>
+  
+  <Card title="Customization" icon="paint-brush" href="/customization/content">
+    Customize the portfolio for your needs
+  </Card>
+  
+  <Card title="Build & Deploy" icon="cloud-arrow-up" href="/deployment/build">
+    Build and deploy to production
+  </Card>
+</CardGroup>
+
+## Additional Resources
+
+- [Vite Documentation](https://vite.dev/) - Learn about the build tool
+- [React Documentation](https://react.dev/) - Official React docs
+- [React Router](https://reactrouter.com/) - Client-side routing
+- [EmailJS](https://www.emailjs.com/) - Email service for contact forms
+
+---
+
+<Info>
+  Having trouble? Make sure you've completed all prerequisite steps and your Node.js version is 18 or higher. Check the troubleshooting section above for common issues.
+</Info>

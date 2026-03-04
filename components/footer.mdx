@@ -1,0 +1,293 @@
+---
+title: 'Footer Component'
+description: 'A minimalist footer component with branding and copyright information'
+icon: 'copyright'
+---
+
+## Overview
+
+The Footer component provides a clean, minimal footer for the portfolio with branding elements and copyright information. It uses a simple design that complements the overall aesthetic without overwhelming the page.
+
+## Features
+
+- Dynamic copyright year (automatically updates)
+- Minimal branding with accent dot
+- Responsive layout
+- Top border separation
+- CSS Module styling
+
+## Implementation
+
+The component is located at `src/components/Footer/Footer.jsx`:
+
+```jsx
+import styles from './Footer.module.css';
+
+export default function Footer() {
+    return (
+        <footer className={styles.footer}>
+            <div className={`container ${styles.inner}`}>
+                <div className={styles.brand}>
+                    <span className={styles.dot} />
+                    <p className={styles.copy}>
+                        © {new Date().getFullYear()} ITZHYPER PORTFOLIO
+                    </p>
+                </div>
+            </div>
+        </footer>
+    );
+}
+```
+
+## Key Features
+
+### Dynamic Copyright Year
+
+The footer automatically displays the current year using JavaScript:
+
+```jsx
+{new Date().getFullYear()}
+```
+
+This ensures your copyright year is always up-to-date without manual updates.
+
+### Minimal Design
+
+The footer uses a simple layout with:
+- A colored accent dot matching the primary theme color
+- Monospace typography for a technical aesthetic
+- Subtle top border to separate from content
+
+## CSS Module Styling
+
+### Footer Container
+
+```css
+.footer {
+    border-top: 2px solid rgba(255, 255, 255, 0.15);
+    background-color: var(--color-bg-dark);
+    padding: 3rem 0;
+}
+```
+
+The footer has a subtle border and generous padding for breathing room.
+
+### Responsive Layout
+
+```css
+.inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .inner {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}
+```
+
+On mobile, content stacks vertically. On larger screens, it spreads horizontally.
+
+### Brand Elements
+
+```css
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.dot {
+    width: 1rem;
+    height: 1rem;
+    background-color: var(--color-primary);
+    display: block;
+    flex-shrink: 0;
+}
+
+.copy {
+    font-family: monospace;
+    font-size: 0.875rem;
+    color: #ffffff;
+}
+```
+
+The accent dot uses the theme's primary color and sits next to the copyright text.
+
+### Link Styles (Optional)
+
+The CSS includes styles for optional footer links:
+
+```css
+.links {
+    display: flex;
+    gap: 2rem;
+}
+
+.link {
+    font-family: monospace;
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.4);
+    transition: color 0.15s;
+}
+
+.link:hover {
+    color: var(--color-primary);
+}
+```
+
+## Customization
+
+### Change Copyright Text
+
+Modify the brand name in `Footer.jsx`:
+
+```jsx
+<p className={styles.copy}>
+    © {new Date().getFullYear()} YOUR BRAND NAME
+</p>
+```
+
+### Add Footer Links
+
+Extend the component to include navigation links:
+
+```jsx
+export default function Footer() {
+    return (
+        <footer className={styles.footer}>
+            <div className={`container ${styles.inner}`}>
+                <div className={styles.brand}>
+                    <span className={styles.dot} />
+                    <p className={styles.copy}>
+                        © {new Date().getFullYear()} ITZHYPER PORTFOLIO
+                    </p>
+                </div>
+                <div className={styles.links}>
+                    <a href="#privacy" className={styles.link}>Privacy</a>
+                    <a href="#terms" className={styles.link}>Terms</a>
+                    <a href="#contact" className={styles.link}>Contact</a>
+                </div>
+            </div>
+        </footer>
+    );
+}
+```
+
+### Change Accent Dot Color
+
+The dot color comes from the CSS variable `--color-primary`. Update it in `index.css`:
+
+```css
+:root {
+    --color-primary: #your-color;
+}
+```
+
+### Remove Accent Dot
+
+To remove the dot entirely:
+
+```jsx
+<div className={styles.brand}>
+    <p className={styles.copy}>
+        © {new Date().getFullYear()} YOUR BRAND
+    </p>
+</div>
+```
+
+### Adjust Padding
+
+Modify the footer padding in `Footer.module.css`:
+
+```css
+.footer {
+    padding: 2rem 0; /* Reduced padding */
+}
+```
+
+### Change Border Style
+
+Update the top border:
+
+```css
+.footer {
+    border-top: 4px solid #ffffff; /* Thicker, solid white border */
+}
+```
+
+### Add Social Icons
+
+Extend the footer with social media icons:
+
+```jsx
+<div className={styles.social}>
+    <a href="https://github.com/..." aria-label="GitHub">
+        <span className="material-icons">code</span>
+    </a>
+    <a href="https://linkedin.com/..." aria-label="LinkedIn">
+        <span className="material-icons">work</span>
+    </a>
+</div>
+```
+
+Add corresponding styles:
+
+```css
+.social {
+    display: flex;
+    gap: 1rem;
+}
+
+.social a {
+    color: rgba(255, 255, 255, 0.4);
+    transition: color 0.15s;
+}
+
+.social a:hover {
+    color: var(--color-primary);
+}
+```
+
+## Usage in App
+
+Import and place the Footer component at the end of your main layout:
+
+```jsx
+import Footer from './components/Footer/Footer';
+
+function App() {
+    return (
+        <>
+            <Navbar />
+            <Hero />
+            <About />
+            <Projects />
+            <Contact />
+            <Footer />
+        </>
+    );
+}
+```
+
+## Accessibility
+
+- Semantic `<footer>` element
+- Sufficient color contrast for text
+- Keyboard-navigable links (if added)
+- ARIA labels recommended for icon-only links
+
+## CSS Variables Used
+
+- `--color-bg-dark` - Footer background color
+- `--color-primary` - Accent dot color
+
+## Browser Support
+
+- All modern browsers
+- Flexbox support required
+- CSS custom properties support required

@@ -1,0 +1,243 @@
+---
+title: 'Building for Production'
+description: 'Learn how to build your portfolio for production deployment'
+icon: 'hammer'
+---
+
+## Overview
+
+The ItzHypeR Portfolio uses Vite as its build tool, which provides fast and optimized production builds. This guide covers everything you need to know about building your portfolio for production.
+
+## Build Process
+
+<Steps>
+  <Step title="Run the Build Command">
+    Execute the build command from your project root:
+
+    ```bash
+    npm run build
+    ```
+
+    This command runs `vite build` which:
+    - Bundles your React application
+    - Minifies JavaScript and CSS
+    - Optimizes assets (images, fonts, etc.)
+    - Generates production-ready files
+  </Step>
+
+  <Step title="Verify Build Output">
+    After building, check the `dist/` directory:
+
+    ```bash
+    ls -la dist/
+    ```
+
+    You should see:
+    - `index.html` - Entry HTML file
+    - `assets/` - Bundled JS, CSS, and other assets
+    - Static files from the `public/` directory
+  </Step>
+
+  <Step title="Preview the Build">
+    Test the production build locally:
+
+    ```bash
+    npm run preview
+    ```
+
+    This starts a local server serving the production build, allowing you to verify everything works correctly before deployment.
+  </Step>
+</Steps>
+
+## What Vite Build Does
+
+Vite's production build process includes several optimizations:
+
+### Code Splitting
+- Automatically splits code into smaller chunks
+- Loads components on-demand for faster initial page load
+- Vendor dependencies are separated for better caching
+
+### Minification
+- Removes whitespace and comments
+- Shortens variable names
+- Reduces bundle size significantly
+
+### Asset Optimization
+- Images under 4KB are inlined as base64
+- Asset filenames include content hashes for cache busting
+- CSS is extracted and minified separately
+
+### Tree Shaking
+- Removes unused code from the final bundle
+- Only includes imported functions/components
+- Significantly reduces bundle size
+
+## Build Configuration
+
+The build is configured in `vite.config.js`:
+
+```javascript vite.config.js
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [react()],
+})
+```
+
+<Note>
+  The React plugin enables Fast Refresh during development and optimizes React code for production.
+</Note>
+
+## Environment Variables
+
+For production builds, you can use environment variables:
+
+### Creating Environment Files
+
+<CodeGroup>
+
+```bash .env.production
+VITE_API_URL=https://api.example.com
+VITE_APP_TITLE=ItzHypeR Portfolio
+VITE_EMAILJS_SERVICE_ID=your_service_id
+VITE_EMAILJS_TEMPLATE_ID=your_template_id
+VITE_EMAILJS_PUBLIC_KEY=your_public_key
+```
+
+```bash .env.local
+# Local overrides (not committed to git)
+VITE_API_URL=http://localhost:3000
+```
+
+</CodeGroup>
+
+### Using Environment Variables
+
+Access environment variables in your code:
+
+```javascript
+const apiUrl = import.meta.env.VITE_API_URL
+const isProduction = import.meta.env.PROD
+```
+
+<Warning>
+  Only variables prefixed with `VITE_` are exposed to your application. Never expose sensitive secrets!
+</Warning>
+
+## Build Optimization Tips
+
+### 1. Analyze Bundle Size
+
+Install and use the rollup-plugin-visualizer:
+
+```bash
+npm install --save-dev rollup-plugin-visualizer
+```
+
+Update `vite.config.js`:
+
+```javascript
+import { visualizer } from 'rollup-plugin-visualizer'
+
+export default defineConfig({
+  plugins: [
+    react(),
+    visualizer({ open: true })
+  ],
+})
+```
+
+### 2. Optimize Images
+
+- Use WebP format for better compression
+- Implement lazy loading for images
+- Consider using `vite-plugin-image-optimizer`
+
+### 3. Code Splitting Strategies
+
+Implement route-based code splitting:
+
+```javascript
+import { lazy, Suspense } from 'react'
+
+const About = lazy(() => import('./pages/About'))
+const Projects = lazy(() => import('./pages/Projects'))
+
+function App() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Routes>
+        <Route path="/about" element={<About />} />
+        <Route path="/projects" element={<Projects />} />
+      </Routes>
+    </Suspense>
+  )
+}
+```
+
+### 4. Reduce Dependencies
+
+- Remove unused packages from `package.json`
+- Use lighter alternatives when possible
+- Import only what you need from libraries
+
+```javascript
+// Bad
+import _ from 'lodash'
+
+// Good
+import debounce from 'lodash/debounce'
+```
+
+## Build Verification Checklist
+
+Before deploying, verify:
+
+<Check>
+  - [ ] Build completes without errors
+  - [ ] `npm run preview` works correctly
+  - [ ] All routes are accessible
+  - [ ] Images and assets load properly
+  - [ ] Contact form functions (if using EmailJS)
+  - [ ] No console errors in production mode
+  - [ ] Performance is acceptable (use Lighthouse)
+</Check>
+
+## Troubleshooting
+
+### Build Fails with Memory Error
+
+Increase Node.js memory limit:
+
+```bash
+NODE_OPTIONS="--max-old-space-size=4096" npm run build
+```
+
+### Assets Not Loading
+
+Ensure your base path is correct in `vite.config.js`:
+
+```javascript
+export default defineConfig({
+  base: '/', // Use './' for relative paths or '/repo-name/' for GitHub Pages
+  plugins: [react()],
+})
+```
+
+### Import Errors
+
+Check that all imports use correct casing and paths:
+
+```javascript
+// Use absolute imports from src
+import Component from '@/components/Component'
+
+// Or relative imports
+import Component from '../components/Component'
+```
+
+## Next Steps
+
+Once your build is ready, proceed to [hosting](/deployment/hosting) to deploy your portfolio.

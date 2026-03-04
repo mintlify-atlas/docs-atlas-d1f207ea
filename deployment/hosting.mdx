@@ -1,0 +1,483 @@
+---
+title: 'Hosting & Deployment'
+description: 'Deploy your portfolio to popular hosting platforms'
+icon: 'rocket'
+---
+
+## Overview
+
+This guide covers deploying your ItzHypeR Portfolio to various hosting platforms. We'll focus on free, production-ready options that work excellently with Vite-based React applications.
+
+## Platform Comparison
+
+| Platform | Best For | Build Time | Custom Domain | Free Tier |
+|----------|----------|------------|---------------|------------|
+| **Vercel** | Vite/React projects | Fast | Yes | Generous |
+| **Netlify** | Static sites | Fast | Yes | Generous |
+| **GitHub Pages** | Open source projects | Moderate | Yes | Free |
+| **Cloudflare Pages** | Global performance | Fast | Yes | Generous |
+
+## Deploy to Vercel (Recommended)
+
+Vercel is the recommended platform for Vite applications, offering excellent performance and zero-configuration deployments.
+
+<Steps>
+  <Step title="Create Vercel Account">
+    1. Go to [vercel.com](https://vercel.com)
+    2. Sign up with GitHub, GitLab, or Bitbucket
+    3. Authorize Vercel to access your repositories
+  </Step>
+
+  <Step title="Import Your Project">
+    Click "Add New Project" and select your portfolio repository:
+
+    - Vercel automatically detects it's a Vite project
+    - Build command: `npm run build`
+    - Output directory: `dist`
+    - Install command: `npm install`
+  </Step>
+
+  <Step title="Configure Environment Variables">
+    If you're using EmailJS or other services, add environment variables:
+
+    ```bash
+    VITE_EMAILJS_SERVICE_ID=your_service_id
+    VITE_EMAILJS_TEMPLATE_ID=your_template_id
+    VITE_EMAILJS_PUBLIC_KEY=your_public_key
+    ```
+
+    <Note>
+      Environment variables are found in Project Settings > Environment Variables
+    </Note>
+  </Step>
+
+  <Step title="Deploy">
+    Click "Deploy" and wait for the build to complete.
+
+    Vercel will:
+    - Install dependencies
+    - Run the build command
+    - Deploy to a production URL
+    - Generate a preview URL for each commit
+  </Step>
+
+  <Step title="Verify Deployment">
+    Once deployed, Vercel provides:
+    - Production URL (e.g., `your-portfolio.vercel.app`)
+    - Automatic HTTPS
+    - Global CDN distribution
+    - Automatic deployments on git push
+  </Step>
+</Steps>
+
+### Vercel CLI Deployment
+
+Alternatively, deploy using the Vercel CLI:
+
+```bash
+# Install Vercel CLI
+npm install -g vercel
+
+# Login to Vercel
+vercel login
+
+# Deploy to preview
+vercel
+
+# Deploy to production
+vercel --prod
+```
+
+## Deploy to Netlify
+
+Netlify is another excellent option with a simple deployment process.
+
+<Steps>
+  <Step title="Create Netlify Account">
+    1. Go to [netlify.com](https://netlify.com)
+    2. Sign up with GitHub, GitLab, or Bitbucket
+    3. Authorize Netlify to access your repositories
+  </Step>
+
+  <Step title="Add New Site">
+    Click "Add new site" > "Import an existing project":
+
+    Select your portfolio repository from your Git provider.
+  </Step>
+
+  <Step title="Configure Build Settings">
+    Enter the following build settings:
+
+    ```yaml
+    Build command: npm run build
+    Publish directory: dist
+    ```
+
+    <Note>
+      Netlify automatically detects these settings for Vite projects
+    </Note>
+  </Step>
+
+  <Step title="Add Environment Variables">
+    Navigate to Site settings > Environment variables:
+
+    ```bash
+    VITE_EMAILJS_SERVICE_ID=your_service_id
+    VITE_EMAILJS_TEMPLATE_ID=your_template_id
+    VITE_EMAILJS_PUBLIC_KEY=your_public_key
+    ```
+  </Step>
+
+  <Step title="Deploy">
+    Click "Deploy site" and Netlify will:
+    - Clone your repository
+    - Install dependencies
+    - Run the build
+    - Deploy to a `.netlify.app` domain
+  </Step>
+</Steps>
+
+### Netlify CLI Deployment
+
+Deploy using the Netlify CLI:
+
+```bash
+# Install Netlify CLI
+npm install -g netlify-cli
+
+# Login to Netlify
+netlify login
+
+# Initialize and deploy
+netlify init
+netlify deploy --prod
+```
+
+### Netlify Configuration File
+
+Create a `netlify.toml` file in your project root:
+
+```toml netlify.toml
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[build.environment]
+  NODE_VERSION = "18"
+```
+
+<Warning>
+  The redirect rule is important for client-side routing to work correctly!
+</Warning>
+
+## Deploy to GitHub Pages
+
+GitHub Pages is ideal for open-source projects and personal portfolios.
+
+<Steps>
+  <Step title="Install gh-pages Package">
+    ```bash
+    npm install --save-dev gh-pages
+    ```
+  </Step>
+
+  <Step title="Update vite.config.js">
+    Set the base path to your repository name:
+
+    ```javascript vite.config.js
+    export default defineConfig({
+      base: '/your-repo-name/',
+      plugins: [react()],
+    })
+    ```
+  </Step>
+
+  <Step title="Add Deploy Scripts">
+    Add these scripts to `package.json`:
+
+    ```json package.json
+    {
+      "scripts": {
+        "predeploy": "npm run build",
+        "deploy": "gh-pages -d dist"
+      }
+    }
+    ```
+  </Step>
+
+  <Step title="Deploy">
+    Run the deploy command:
+
+    ```bash
+    npm run deploy
+    ```
+
+    This creates a `gh-pages` branch and pushes the build output to it.
+  </Step>
+
+  <Step title="Enable GitHub Pages">
+    1. Go to your repository settings
+    2. Navigate to "Pages" section
+    3. Select `gh-pages` branch as source
+    4. Save and wait for deployment
+  </Step>
+</Steps>
+
+Your site will be available at `https://yourusername.github.io/your-repo-name/`
+
+## Deploy to Cloudflare Pages
+
+<Steps>
+  <Step title="Create Cloudflare Account">
+    1. Go to [cloudflare.com](https://cloudflare.com)
+    2. Sign up and verify your email
+    3. Navigate to "Pages" in the dashboard
+  </Step>
+
+  <Step title="Connect Git Repository">
+    Click "Create a project" > "Connect to Git":
+
+    Authorize Cloudflare and select your repository.
+  </Step>
+
+  <Step title="Configure Build">
+    Enter build settings:
+
+    ```yaml
+    Framework preset: Vite
+    Build command: npm run build
+    Build output directory: dist
+    ```
+  </Step>
+
+  <Step title="Deploy">
+    Click "Save and Deploy" - Cloudflare will build and deploy your site with global CDN distribution.
+  </Step>
+</Steps>
+
+## Custom Domain Setup
+
+### For Vercel
+
+<Steps>
+  <Step title="Add Domain">
+    Go to Project Settings > Domains and add your custom domain.
+  </Step>
+
+  <Step title="Configure DNS">
+    Add these DNS records at your domain registrar:
+
+    ```
+    Type: A
+    Name: @
+    Value: 76.76.21.21
+
+    Type: CNAME
+    Name: www
+    Value: cname.vercel-dns.com
+    ```
+  </Step>
+
+  <Step title="Verify">
+    Vercel automatically provisions SSL certificate and enables HTTPS.
+  </Step>
+</Steps>
+
+### For Netlify
+
+<Steps>
+  <Step title="Add Domain">
+    Go to Site settings > Domain management > Add custom domain.
+  </Step>
+
+  <Step title="Configure DNS">
+    Update your DNS records:
+
+    ```
+    Type: A
+    Name: @
+    Value: 75.2.60.5
+
+    Type: CNAME
+    Name: www
+    Value: your-site.netlify.app
+    ```
+  </Step>
+
+  <Step title="Enable HTTPS">
+    Netlify automatically provisions a Let's Encrypt certificate.
+  </Step>
+</Steps>
+
+<Note>
+  DNS propagation can take 24-48 hours. Use [dnschecker.org](https://dnschecker.org) to verify.
+</Note>
+
+## CI/CD Setup
+
+### Automatic Deployments
+
+Both Vercel and Netlify automatically deploy when you push to your repository:
+
+- **Production**: Pushes to `main`/`master` branch
+- **Preview**: Pull requests get unique preview URLs
+- **Rollback**: Easy rollback to previous deployments
+
+### GitHub Actions Workflow
+
+For more control, create a GitHub Actions workflow:
+
+```yaml .github/workflows/deploy.yml
+name: Deploy Portfolio
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build
+        run: npm run build
+        env:
+          VITE_EMAILJS_SERVICE_ID: ${{ secrets.EMAILJS_SERVICE_ID }}
+          VITE_EMAILJS_TEMPLATE_ID: ${{ secrets.EMAILJS_TEMPLATE_ID }}
+          VITE_EMAILJS_PUBLIC_KEY: ${{ secrets.EMAILJS_PUBLIC_KEY }}
+      
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+```
+
+## Environment Variables in Hosting Platforms
+
+### Vercel
+
+1. Project Settings > Environment Variables
+2. Add variables for Production, Preview, and Development
+3. Variables are encrypted and injected at build time
+
+### Netlify
+
+1. Site settings > Environment variables
+2. Add key-value pairs
+3. Optional: Scope to specific branches
+
+### GitHub Actions
+
+1. Repository Settings > Secrets and variables > Actions
+2. Add secrets (encrypted) or variables (plain text)
+3. Reference with `${{ secrets.SECRET_NAME }}`
+
+<Warning>
+  Never commit `.env` files with sensitive data to version control!
+</Warning>
+
+## Post-Deployment Checklist
+
+<Check>
+  - [ ] Site loads correctly at production URL
+  - [ ] All routes work (no 404 errors)
+  - [ ] Images and assets load properly
+  - [ ] Contact form sends emails (if applicable)
+  - [ ] HTTPS is enabled
+  - [ ] Custom domain is configured (if applicable)
+  - [ ] SEO meta tags are present
+  - [ ] Performance is good (use Lighthouse)
+  - [ ] Mobile responsiveness works
+  - [ ] Analytics are tracking (if configured)
+</Check>
+
+## Monitoring & Analytics
+
+### Vercel Analytics
+
+Enable Vercel Analytics for performance insights:
+
+```javascript
+import { Analytics } from '@vercel/analytics/react'
+
+function App() {
+  return (
+    <>
+      <YourApp />
+      <Analytics />
+    </>
+  )
+}
+```
+
+### Google Analytics
+
+Add Google Analytics to track visitors:
+
+```html index.html
+<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'GA_MEASUREMENT_ID');
+</script>
+```
+
+## Troubleshooting
+
+### 404 Errors on Refresh
+
+Add redirect rules for client-side routing:
+
+**Vercel** - Create `vercel.json`:
+```json
+{
+  "rewrites": [{ "source": "/(.*)", "destination": "/" }]
+}
+```
+
+**Netlify** - Create `_redirects` in public folder:
+```
+/*  /index.html  200
+```
+
+### Build Fails
+
+- Check build logs for specific errors
+- Verify Node.js version matches local environment
+- Ensure all dependencies are in `package.json`
+- Check environment variables are set correctly
+
+### Slow Performance
+
+- Enable CDN caching
+- Optimize images (WebP, lazy loading)
+- Implement code splitting
+- Use performance monitoring tools
+
+## Next Steps
+
+Your portfolio is now live! Consider:
+
+- Setting up [custom domains](/deployment/hosting#custom-domain-setup)
+- Implementing [CI/CD workflows](/deployment/hosting#cicd-setup)
+- Monitoring with [analytics](/deployment/hosting#monitoring--analytics)
+- Optimizing for [SEO and performance](/essentials/settings)

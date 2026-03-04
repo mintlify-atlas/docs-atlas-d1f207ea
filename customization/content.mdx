@@ -1,0 +1,395 @@
+---
+title: 'Content Customization'
+description: 'Update personal information, text, social links, and skills throughout the portfolio'
+---
+
+## Overview
+
+Customizing the content of your portfolio involves updating text, links, and personal information across various components. This guide shows you exactly where to make these changes.
+
+## Hero Section
+
+The Hero section is the first thing visitors see. It's defined in `src/components/Hero/Hero.jsx`.
+
+### Personal Information
+
+<Steps>
+  <Step title="Open Hero Component">
+    Navigate to `src/components/Hero/Hero.jsx`
+  </Step>
+  
+  <Step title="Update Role and Location">
+    Modify the tagline section:
+    
+    ```jsx Hero.jsx
+    <div className={styles.tagline}>
+      <p className={styles.role}>Full Stack Engineer</p>
+      <p className={styles.location}>BASED IN ESTELI, NICARAGUA</p>
+    </div>
+    ```
+    
+    Change to your role and location:
+    
+    ```jsx
+    <div className={styles.tagline}>
+      <p className={styles.role}>Frontend Developer</p>
+      <p className={styles.location}>BASED IN SAN FRANCISCO, CA</p>
+    </div>
+    ```
+  </Step>
+  
+  <Step title="Update Headline">
+    Modify the main headline:
+    
+    ```jsx Hero.jsx
+    <h1 className={styles.headline}>
+      BUILDING <br />
+      <span className={styles.outlineWord}>ROBUST</span> <br />
+      SYSTEMS.
+    </h1>
+    ```
+  </Step>
+  
+  <Step title="Update Description">
+    Change the description box content:
+    
+    ```jsx Hero.jsx
+    <div className={styles.descBox}>
+      <p>
+        I craft high-performance digital experiences with brutal
+        efficiency. Specializing in scalable architecture, clean code,
+        and user-centric interfaces.
+      </p>
+    </div>
+    ```
+  </Step>
+</Steps>
+
+### Profile Image
+
+Update your profile photo:
+
+```jsx Hero.jsx
+<img
+  src="/GustavoPeralta.webp"
+  alt="Stylized developer portrait with tech aesthetic"
+  className={styles.photo}
+  fetchpriority="high"
+  loading="eager"
+/>
+```
+
+<Note>
+Place your image in the `public/` folder and reference it with a leading slash. For example, `/public/profile.webp` becomes `src="/profile.webp"`
+</Note>
+
+### Developer Tag
+
+Update the developer name tag:
+
+```jsx Hero.jsx
+<div className={styles.devTag}>&lt;GUSTAVO PERALTA /&gt;</div>
+```
+
+Change to your name:
+
+```jsx
+<div className={styles.devTag}>&lt;YOUR NAME /&gt;</div>
+```
+
+## Social Links
+
+### Hero CTAs
+
+Update the call-to-action buttons in the Hero section:
+
+```jsx Hero.jsx
+<div className={styles.ctas}>
+  <a href="#projects" className={styles.btnPrimary}>
+    VIEW PROJECTS
+    <span className="material-icons">arrow_downward</span>
+  </a>
+  <a 
+    href="https://github.com/xItzHypeR" 
+    target="_blank" 
+    rel="noopener noreferrer" 
+    className={styles.btnSecondary}
+  >
+    GITHUB
+    <span className="material-icons">code</span>
+  </a>
+</div>
+```
+
+<Warning>
+Always include `target="_blank"` and `rel="noopener noreferrer"` for external links to improve security and performance.
+</Warning>
+
+### Contact Section Links
+
+Update social links in `src/components/Contact/Contact.jsx`:
+
+```jsx Contact.jsx
+<div className={styles.links}>
+  <a 
+    target="_blank" 
+    href="https://www.linkedin.com/in/gustavo-peralta-54a598249/" 
+    className={`${styles.socialBtn} ${styles.socialBtnLight}`}
+  >
+    LINKEDIN
+  </a>
+  <a 
+    target="_blank" 
+    href="https://www.instagram.com/ItzHypeR.dev/" 
+    className={styles.socialBtn}
+  >
+    INSTAGRAM
+  </a>
+</div>
+```
+
+Replace with your social media URLs:
+
+```jsx
+<div className={styles.links}>
+  <a 
+    target="_blank" 
+    href="https://www.linkedin.com/in/your-profile" 
+    className={`${styles.socialBtn} ${styles.socialBtnLight}`}
+  >
+    LINKEDIN
+  </a>
+  <a 
+    target="_blank" 
+    href="https://twitter.com/your-handle" 
+    className={styles.socialBtn}
+  >
+    TWITTER
+  </a>
+</div>
+```
+
+## CV/Resume Download
+
+The resume download link is in the Navbar component at `src/components/Navbar/Navbar.jsx`:
+
+```jsx Navbar.jsx
+<a download href="/CV_Gustavo_Peralta.pdf" className={styles.outlineBtn}>
+  DOWNLOAD RESUME
+</a>
+```
+
+<Steps>
+  <Step title="Add Your Resume">
+    Place your PDF resume in the `public/` folder. For example: `public/Resume_John_Doe.pdf`
+  </Step>
+  
+  <Step title="Update the Link">
+    Change the href attribute:
+    
+    ```jsx
+    <a download href="/Resume_John_Doe.pdf" className={styles.outlineBtn}>
+      DOWNLOAD RESUME
+    </a>
+    ```
+  </Step>
+</Steps>
+
+## About Section
+
+Update the About section in `src/components/About/About.jsx`.
+
+### Headline and Body Text
+
+```jsx About.jsx
+<h2 className={styles.headline}>
+  PURE <br />CODE. <br />NO FLUFF.
+</h2>
+<p className={styles.body}>
+  I don't just write code; I engineer solutions. My approach is
+  rooted in mathematical precision and creative problem-solving. I
+  believe in software that is fast, reliable, and accessible.
+</p>
+```
+
+Customize to reflect your philosophy:
+
+```jsx
+<h2 className={styles.headline}>
+  CREATIVE <br />DEVELOPER. <br />CLEAN CODE.
+</h2>
+<p className={styles.body}>
+  I'm passionate about creating beautiful, performant web experiences.
+  My focus is on modern frameworks, responsive design, and writing
+  maintainable code that scales.
+</p>
+```
+
+### Skills List
+
+The skills are defined as an array at the top of the file:
+
+```jsx About.jsx
+const skills = [
+  'Java', 'C#', 'JavaScript (ES6+)', 'SQL',
+  'React.js', 'Vite', 'Tailwind CSS', 'HTML5', 'CSS3',
+  'Git', 'GitHub', 'VS Code', 'MySQL Workbench'
+];
+```
+
+<Steps>
+  <Step title="Update Skills Array">
+    Replace with your tech stack:
+    
+    ```jsx
+    const skills = [
+      'React', 'TypeScript', 'Next.js', 'Node.js',
+      'GraphQL', 'PostgreSQL', 'Docker', 'AWS',
+      'Tailwind CSS', 'Jest', 'Cypress', 'Figma'
+    ];
+    ```
+  </Step>
+  
+  <Step title="Component Auto-Updates">
+    The component automatically renders these skills:
+    
+    ```jsx
+    <ul className={styles.skillsList}>
+      {skills.map((s) => (
+        <li key={s} className={styles.skillItem}>
+          <span className={styles.dot} />
+          {s}
+        </li>
+      ))}
+    </ul>
+    ```
+  </Step>
+</Steps>
+
+<Note>
+The skills list uses a two-column grid layout automatically. Add or remove skills freely without worrying about layout.
+</Note>
+
+### About Section Image
+
+Update the image URL:
+
+```jsx About.jsx
+<img
+  src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800&auto=format&fit=crop"
+  alt="Minimalist laptop setup on a wooden desk"
+  className={styles.photo}
+/>
+```
+
+Replace with your own image:
+
+```jsx
+<img
+  src="/workspace-photo.jpg"
+  alt="My development workspace"
+  className={styles.photo}
+/>
+```
+
+## Contact Section
+
+Update the contact section heading and subtitle in `src/components/Contact/Contact.jsx`:
+
+```jsx Contact.jsx
+<h2 className={styles.title}>READY TO SCALE?</h2>
+<p className={styles.subtitle}>
+  Currently available for freelance projects and open to full-time
+  opportunities. Let&apos;s build something that breaks the internet
+  (in a good way).
+</p>
+```
+
+Customize the messaging:
+
+```jsx
+<h2 className={styles.title}>LET'S WORK TOGETHER</h2>
+<p className={styles.subtitle}>
+  I'm available for freelance projects and collaborations.
+  Reach out to discuss how we can build something amazing.
+</p>
+```
+
+## Navbar Branding
+
+Update the site logo/title in `src/components/Navbar/Navbar.jsx`:
+
+```jsx Navbar.jsx
+<a href="#hero" className={styles.logo}>ITZHYPER.PORTFOLIO</a>
+```
+
+Change to your branding:
+
+```jsx
+<a href="#hero" className={styles.logo}>JOHN.DEV</a>
+```
+
+## Meta Tags & SEO
+
+Update meta information in `index.html`:
+
+```html index.html
+<meta name="description" content="ItzHyper's Full stack developer portfolio" />
+<meta property="og:title" content="ItzHypeR | Full Stack Developer" />
+<meta property="og:description" content="ItzHyper's Full stack developer portfolio" />
+<meta property="og:image" content="https://portfolio-theta-amber-81.vercel.app/GustavoPeralta.webp" />
+<title>Gustavo Peralta | Full Stack Developer</title>
+```
+
+<Steps>
+  <Step title="Update Title">
+    ```html
+    <title>Your Name | Your Role</title>
+    ```
+  </Step>
+  
+  <Step title="Update Meta Description">
+    ```html
+    <meta name="description" content="Your professional description for search engines" />
+    ```
+  </Step>
+  
+  <Step title="Update Open Graph Tags">
+    These control how your site appears when shared on social media:
+    
+    ```html
+    <meta property="og:title" content="Your Name | Your Role" />
+    <meta property="og:description" content="Your portfolio description" />
+    <meta property="og:image" content="https://yoursite.com/preview-image.jpg" />
+    ```
+  </Step>
+</Steps>
+
+<Warning>
+The Open Graph image should be an absolute URL (starting with `https://`) and ideally 1200x630 pixels for optimal display on social platforms.
+</Warning>
+
+## Quick Reference Table
+
+| Content | File Location | Line Reference |
+|---------|--------------|----------------|
+| Hero headline | `src/components/Hero/Hero.jsx` | Lines 14-18 |
+| Hero description | `src/components/Hero/Hero.jsx` | Lines 20-26 |
+| Hero image | `src/components/Hero/Hero.jsx` | Lines 46-52 |
+| GitHub link | `src/components/Hero/Hero.jsx` | Lines 33-36 |
+| Skills list | `src/components/About/About.jsx` | Lines 3-7 |
+| About text | `src/components/About/About.jsx` | Lines 16-23 |
+| Social links | `src/components/Contact/Contact.jsx` | Lines 71-74 |
+| Resume download | `src/components/Navbar/Navbar.jsx` | Line 15 |
+| Site title | `index.html` | Line 17 |
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Projects Data" icon="folder" href="/customization/projects-data">
+    Learn how to add and customize your portfolio projects
+  </Card>
+  <Card title="Contact Form Setup" icon="envelope" href="/customization/contact-form">
+    Configure EmailJS for the contact form
+  </Card>
+</CardGroup>

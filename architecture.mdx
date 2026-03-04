@@ -1,0 +1,329 @@
+---
+title: "Architecture"
+description: "Understand the React 19 + Vite architecture and modern frontend design patterns"
+icon: "diagram-project"
+---
+
+The ItzHypeR Portfolio is built on a modern, performance-first architecture combining React 19 with Vite 7. This stack delivers near-instant development feedback, optimized production builds, and a maintainable component structure.
+
+## Technology Stack
+
+<CardGroup cols={2}>
+  <Card title="React 19" icon="react" href="https://react.dev">
+    Latest React with improved performance and modern features
+  </Card>
+  <Card title="Vite 7" icon="bolt" href="https://vitejs.dev">
+    Next-generation build tool with lightning-fast HMR
+  </Card>
+  <Card title="React Router DOM 7" icon="route">
+    Client-side routing for seamless navigation
+  </Card>
+  <Card title="CSS Modules" icon="palette">
+    Scoped styling with zero runtime overhead
+  </Card>
+</CardGroup>
+
+## Why This Stack?
+
+### React 19
+
+The latest version of React brings several key improvements:
+
+- **Improved performance**: Faster rendering and reconciliation
+- **Server Components ready**: Future-proof architecture
+- **Better error handling**: Enhanced developer experience
+- **Modern patterns**: Full support for hooks and concurrent features
+
+### Vite 7
+
+Vite provides a superior development experience compared to traditional bundlers:
+
+<Accordion title="Near-instant Hot Module Replacement (HMR)">
+  Changes to your components appear in the browser in milliseconds, not seconds. Vite achieves this by serving ES modules directly during development and only transforming files on demand.
+</Accordion>
+
+<Accordion title="Optimized Production Builds">
+  Vite uses Rollup under the hood to create highly optimized production bundles with automatic code splitting, tree shaking, and minification.
+</Accordion>
+
+<Accordion title="Native ES Modules">
+  During development, Vite serves your code via native ES modules, eliminating the need for bundling during development entirely.
+</Accordion>
+
+```javascript title="vite.config.js"
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [react()],
+})
+```
+
+## Component Architecture
+
+The portfolio follows a **component-based architecture** where the UI is broken down into reusable, self-contained components.
+
+### Component Structure
+
+Each component follows a consistent pattern:
+
+```
+ComponentName/
+├── ComponentName.jsx      # Component logic and JSX
+└── ComponentName.module.css  # Scoped styles
+```
+
+This co-location pattern keeps related code together, making components easy to understand and maintain.
+
+### Main Application Flow
+
+```jsx title="src/App.jsx"
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import './App.css';
+import Navbar from './components/Navbar/Navbar';
+import Hero from './components/Hero/Hero';
+import Marquee from './components/Marquee/Marquee';
+import Projects from './components/Projects/Projects';
+import About from './components/About/About';
+import Contact from './components/Contact/Contact';
+import Footer from './components/Footer/Footer';
+import HireMe from './components/HireMe/HireMe';
+import ProjectDetail from './components/ProjectDetail/ProjectDetail';
+
+function Home() {
+  return (
+    <>
+      <Navbar />
+      <main className="bg-grid-pattern" style={{ paddingTop: '80px' }}>
+        <Hero />
+        <Marquee />
+        <Projects />
+        <About />
+        <Contact />
+      </main>
+      <Footer />
+      <HireMe />
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/project/:id" element={<ProjectDetail />} />
+      </Routes>
+    </Router>
+  );
+}
+```
+
+### Component Hierarchy
+
+```
+App (Router)
+├── Route: "/" → Home
+│   ├── Navbar (fixed header)
+│   ├── main (scrollable content)
+│   │   ├── Hero
+│   │   ├── Marquee
+│   │   ├── Projects
+│   │   ├── About
+│   │   └── Contact
+│   ├── Footer
+│   └── HireMe (floating button)
+└── Route: "/project/:id" → ProjectDetail
+```
+
+## CSS Modules Architecture
+
+The portfolio uses **CSS Modules** for component styling, providing:
+
+- **Scoped styles**: Class names are locally scoped, preventing conflicts
+- **Zero runtime overhead**: Styles are extracted at build time
+- **TypeScript-friendly**: Can be typed for better developer experience
+- **Component co-location**: Styles live next to components
+
+### How CSS Modules Work
+
+```jsx title="Example Component"
+import styles from './Hero.module.css';
+
+export default function Hero() {
+  return (
+    <section className={styles.hero}>
+      <h1 className={styles.headline}>Welcome</h1>
+    </section>
+  );
+}
+```
+
+During build, Vite transforms class names like `hero` into unique identifiers like `Hero_hero__a1b2c`, ensuring no naming conflicts across components.
+
+### Global Styles
+
+Global styles and CSS variables live in `src/index.css`:
+
+```css title="src/index.css"
+:root {
+  --color-primary: #fbc926;
+  --color-accent: #8c73fa;
+  --shadow-neo: 4px 4px 0 rgba(0, 0, 0, 1);
+  /* ... more variables */
+}
+```
+
+Components reference these variables in their CSS Modules for consistent theming.
+
+## State Management
+
+This portfolio uses **React's built-in state management** with hooks:
+
+- `useState` for local component state (e.g., form inputs, menu open/closed)
+- `useParams` from React Router for reading URL parameters
+- `useNavigate` for programmatic navigation
+
+<Note>
+For a portfolio site with limited state complexity, React's built-in hooks are sufficient. As your needs grow, consider adding Context API or a state management library like Zustand.
+</Note>
+
+## Data Architecture
+
+Project data is centralized in a single source of truth:
+
+```jsx title="src/data/projects.js"
+export const projects = [
+  {
+    id: 'chatverde',
+    title: 'CHAT VERDE',
+    tagline: 'CONVERSATIONAL APP',
+    tech: 'F# • .NET • NLP • C#',
+    techList: ['F#', '.NET', 'NLP', 'C#', 'Windows Forms'],
+    // ... more fields
+  },
+  // ... more projects
+];
+```
+
+Components import and use this data:
+
+```jsx
+import { projects } from '../data/projects';
+
+// Use directly
+{projects.map(project => <ProjectCard key={project.id} {...project} />)}
+
+// Find by ID
+const project = projects.find(p => p.id === params.id);
+```
+
+This approach keeps data separate from presentation logic and makes updates simple.
+
+## Build & Dev Server
+
+### Development Server
+
+```bash
+npm run dev
+```
+
+Vite's dev server:
+- Serves files at `http://localhost:5173`
+- Enables HMR (hot module replacement)
+- Runs on your local network with `--host` flag
+- Provides instant feedback for code changes
+
+### Production Build
+
+```bash
+npm run build
+```
+
+Vite creates an optimized production build:
+- Bundles and minifies JavaScript/CSS
+- Tree-shakes unused code
+- Splits code for optimal loading
+- Generates static assets in `dist/`
+
+### Preview Production Build
+
+```bash
+npm run preview
+```
+
+Test the production build locally before deploying.
+
+## Performance Optimizations
+
+The architecture includes several built-in optimizations:
+
+<CardGroup cols={2}>
+  <Card title="Code Splitting" icon="scissors">
+    Routes are automatically split into separate chunks
+  </Card>
+  <Card title="Tree Shaking" icon="tree">
+    Unused code is eliminated from production builds
+  </Card>
+  <Card title="Asset Optimization" icon="image">
+    Images and assets are optimized during build
+  </Card>
+  <Card title="CSS Extraction" icon="file-code">
+    CSS is extracted and minified separately
+  </Card>
+</CardGroup>
+
+### Image Optimization
+
+WebP images are used throughout for optimal performance:
+
+```jsx
+<img
+  src="/GustavoPeralta.webp"
+  alt="Developer portrait"
+  fetchpriority="high"
+  loading="eager"
+/>
+```
+
+## Development Workflow
+
+<Steps>
+  <Step title="Start dev server">
+    Run `npm run dev` to launch the Vite development server with HMR enabled.
+  </Step>
+  
+  <Step title="Edit components">
+    Make changes to components in `src/components/`. Changes appear instantly in the browser.
+  </Step>
+  
+  <Step title="Update styles">
+    Modify CSS Modules in `.module.css` files. Styles update without full page reload.
+  </Step>
+  
+  <Step title="Add data">
+    Update `src/data/projects.js` to add or modify portfolio projects.
+  </Step>
+  
+  <Step title="Test locally">
+    Build and preview with `npm run build && npm run preview` before deploying.
+  </Step>
+</Steps>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Project Structure" icon="folder-tree" href="/project-structure">
+    Explore the complete directory layout
+  </Card>
+  <Card title="Routing" icon="route" href="/routing">
+    Learn about React Router integration
+  </Card>
+  <Card title="Components" icon="puzzle-piece" href="/components/navbar">
+    Dive into individual components
+  </Card>
+  <Card title="Customization" icon="palette" href="/customization/styling">
+    Customize the portfolio for your brand
+  </Card>
+</CardGroup>

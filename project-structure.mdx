@@ -1,0 +1,423 @@
+---
+title: "Project Structure"
+description: "Complete directory layout and file organization"
+icon: "folder-tree"
+---
+
+The portfolio follows a clean, organized structure that separates concerns and makes the codebase easy to navigate.
+
+## Directory Tree
+
+```
+portfolio/
+├── public/                 # Static assets served as-is
+│   ├── ChatVerde.webp
+│   ├── GustavoPeralta.webp
+│   ├── TiendaDeRopaAllegra.webp
+│   ├── EsteliHub.webp
+│   ├── prodSystem.webp
+│   ├── cashcrafter.webp
+│   └── vite.svg
+├── src/                    # Application source code
+│   ├── assets/             # Internal assets
+│   ├── components/         # React components
+│   │   ├── About/
+│   │   │   ├── About.jsx
+│   │   │   └── About.module.css
+│   │   ├── Contact/
+│   │   │   ├── Contact.jsx
+│   │   │   └── Contact.module.css
+│   │   ├── Footer/
+│   │   │   ├── Footer.jsx
+│   │   │   └── Footer.module.css
+│   │   ├── Hero/
+│   │   │   ├── Hero.jsx
+│   │   │   └── Hero.module.css
+│   │   ├── HireMe/
+│   │   │   ├── HireMe.jsx
+│   │   │   └── HireMe.module.css
+│   │   ├── Marquee/
+│   │   │   ├── Marquee.jsx
+│   │   │   └── Marquee.module.css
+│   │   ├── Navbar/
+│   │   │   ├── Navbar.jsx
+│   │   │   ├── Navbar.module.css
+│   │   │   └── Checkbox.jsx
+│   │   ├── ProjectDetail/
+│   │   │   ├── ProjectDetail.jsx
+│   │   │   └── ProjectDetail.module.css
+│   │   └── Projects/
+│   │       ├── Projects.jsx
+│   │       └── Projects.module.css
+│   ├── data/
+│   │   └── projects.js     # Project data source
+│   ├── App.jsx             # Main app component with routing
+│   ├── App.css             # Global app styles
+│   ├── main.jsx            # React entry point
+│   └── index.css           # Global CSS variables and resets
+├── index.html              # HTML entry point
+├── vite.config.js          # Vite configuration
+├── package.json            # Dependencies and scripts
+├── package-lock.json       # Dependency lock file
+├── eslint.config.js        # ESLint configuration
+├── .gitignore              # Git ignore rules
+└── README.md               # Project documentation
+```
+
+## Key Directories
+
+### `public/`
+
+Static assets that are served as-is without processing. These files are:
+
+- **Served from root**: Files in `public/` are available at `/filename.ext`
+- **Not bundled**: Vite serves them directly without importing
+- **Optimized for production**: Images should be pre-optimized (WebP format)
+
+<Tip>
+Place project screenshots, your profile photo, and the CV/resume in `public/` for easy access.
+</Tip>
+
+### `src/`
+
+All application source code lives here. This directory is processed by Vite during build.
+
+#### `src/components/`
+
+React components following a **co-located pattern**:
+
+```
+ComponentName/
+├── ComponentName.jsx          # Component logic and JSX
+└── ComponentName.module.css   # Scoped CSS styles
+```
+
+**Benefits of this structure:**
+
+- **Easy to find**: All files for a component are in one place
+- **Easy to delete**: Remove an entire component by deleting its folder
+- **Scoped styles**: CSS Modules prevent naming conflicts
+- **Self-documenting**: Component structure is immediately clear
+
+#### `src/data/`
+
+Data files separate content from presentation:
+
+- **`projects.js`**: All project showcase data in a centralized array
+- **Easy to update**: Change project content without touching components
+- **Type-safe**: Can be typed with JSDoc or TypeScript
+
+Example:
+
+```javascript title="src/data/projects.js"
+export const projects = [
+  {
+    id: 'chatverde',
+    title: 'CHAT VERDE',
+    tagline: 'CONVERSATIONAL APP',
+    tech: 'F# • .NET • NLP • C#',
+    techList: ['F#', '.NET', 'NLP', 'C#', 'Windows Forms'],
+    badge: '',
+    desc: 'Optimized search performance...',
+    fullDesc: 'A conversational console application...',
+    challenge: 'Finding products in a catalog...',
+    solution: 'I developed a search engine...',
+    stats: {
+      role: 'Software Engineer',
+      timeline: 'November 2025',
+      team: 'Estelí, Nicaragua'
+    },
+    img: '/ChatVerde.webp',
+    imgAlt: 'Console conversational interface'
+  },
+  // ... more projects
+];
+```
+
+## Core Files
+
+### `index.html`
+
+The HTML entry point loaded by the browser:
+
+```html title="index.html"
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ItzHyper's Full stack developer portfolio" />
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap">
+    
+    <!-- Title & Meta -->
+    <meta property="og:title" content="ItzHypeR | Full Stack Developer" />
+    <meta property="og:description" content="ItzHyper's Full stack developer portfolio" />
+    <title>Gustavo Peralta | Full Stack Developer</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+```
+
+<Accordion title="Key elements explained">
+- **`<div id="root">`**: React mounting point
+- **`<script type="module" src="/src/main.jsx">`**: Vite entry point
+- **Space Grotesk font**: Custom font loaded from Google Fonts
+- **Open Graph tags**: Social media preview metadata
+</Accordion>
+
+### `src/main.jsx`
+
+React application entry point:
+
+```jsx title="src/main.jsx"
+import { createRoot } from 'react-dom/client'
+import './index.css'
+import App from './App.jsx'
+
+createRoot(document.getElementById('root')).render(
+  <App />
+)
+```
+
+This file:
+- Imports global CSS (`index.css`)
+- Mounts the `App` component to the DOM
+- Uses React 19's `createRoot` API
+
+### `src/App.jsx`
+
+Main application component with routing:
+
+```jsx title="src/App.jsx"
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import './App.css';
+// ... component imports
+
+function Home() {
+  return (
+    <>
+      <Navbar />
+      <main className="bg-grid-pattern" style={{ paddingTop: '80px' }}>
+        <Hero />
+        <Marquee />
+        <Projects />
+        <About />
+        <Contact />
+      </main>
+      <Footer />
+      <HireMe />
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/project/:id" element={<ProjectDetail />} />
+      </Routes>
+    </Router>
+  );
+}
+```
+
+Defines:
+- **Routes**: Home page (`/`) and project detail pages (`/project/:id`)
+- **Layout**: Component composition for the home page
+- **Navigation**: React Router integration
+
+### `src/index.css`
+
+Global CSS variables, resets, and utility classes:
+
+```css title="src/index.css (excerpt)"
+:root {
+  /* Colors */
+  --color-primary: #fbc926;
+  --color-accent: #8c73fa;
+  --color-bg: #0a0a0a;
+  --color-text: #ffffff;
+  
+  /* Shadows */
+  --shadow-neo: 4px 4px 0 rgba(0, 0, 0, 1);
+  
+  /* Spacing */
+  --spacing-section: 100px;
+}
+
+/* Global resets */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Utility classes */
+.bg-grid-pattern {
+  background-image: url("data:image/svg+xml,...");
+  background-size: 50px 50px;
+}
+```
+
+## Configuration Files
+
+### `vite.config.js`
+
+Vite build configuration:
+
+```javascript title="vite.config.js"
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [react()],
+})
+```
+
+This minimal config:
+- Enables React Fast Refresh
+- Sets up JSX transformation
+- Configures HMR (hot module replacement)
+
+### `package.json`
+
+Project metadata and dependencies:
+
+```json title="package.json (excerpt)"
+{
+  "name": "portfolio",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@emailjs/browser": "^4.4.1",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.13.1",
+    "styled-components": "^6.3.11"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.1.1",
+    "vite": "^7.3.1",
+    "eslint": "^9.39.1"
+  }
+}
+```
+
+### `eslint.config.js`
+
+ESLint configuration for code quality:
+
+```javascript title="eslint.config.js"
+import js from '@eslint/js'
+import globals from 'globals'
+import react from 'eslint-plugin-react'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
+
+export default [
+  { ignores: ['dist'] },
+  {
+    files: ['**/*.{js,jsx}'],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        ecmaFeatures: { jsx: true },
+        sourceType: 'module',
+      },
+    },
+    settings: { react: { version: '19.2' } },
+    plugins: {
+      react,
+      'react-hooks': reactHooks,
+      'react-refresh': reactRefresh,
+    },
+    rules: {
+      ...js.configs.recommended.rules,
+      ...react.configs.recommended.rules,
+      ...react.configs['jsx-runtime'].rules,
+      ...reactHooks.configs.recommended.rules,
+      'react/jsx-no-target-blank': 'off',
+      'react-refresh/only-export-components': [
+        'warn',
+        { allowConstantExport: true },
+      ],
+    },
+  },
+]
+```
+
+## File Naming Conventions
+
+The project follows consistent naming patterns:
+
+| File Type | Convention | Example |
+|-----------|-----------|---------|
+| React components | PascalCase | `Hero.jsx`, `ProjectDetail.jsx` |
+| CSS Modules | PascalCase.module.css | `Hero.module.css` |
+| Data files | camelCase | `projects.js` |
+| Config files | lowercase | `vite.config.js` |
+| Global CSS | lowercase | `index.css`, `App.css` |
+
+## Where to Find Things
+
+<AccordionGroup>
+  <Accordion title="Where do I add a new component?">
+    Create a new folder in `src/components/` with the component name (PascalCase). Add two files:
+    - `ComponentName.jsx` (component logic)
+    - `ComponentName.module.css` (component styles)
+  </Accordion>
+
+  <Accordion title="Where do I add project data?">
+    Edit `src/data/projects.js` and add a new object to the `projects` array. See the [Projects Data](/customization/projects-data) guide for the schema.
+  </Accordion>
+
+  <Accordion title="Where do I change global colors?">
+    Edit the CSS variables in `src/index.css` under the `:root` selector. These variables are used throughout the application.
+  </Accordion>
+
+  <Accordion title="Where do I add images?">
+    Place images in the `public/` directory. Reference them with `/filename.ext` in your components. Use WebP format for best performance.
+  </Accordion>
+
+  <Accordion title="Where do I configure routes?">
+    Edit `src/App.jsx` and add new `<Route>` components inside the `<Routes>` component. See the [Routing](/routing) guide for details.
+  </Accordion>
+
+  <Accordion title="Where do I add fonts?">
+    Link fonts in `index.html` (for Google Fonts) or place font files in `public/` and reference them in `src/index.css` with `@font-face`.
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Architecture" icon="diagram-project" href="/architecture">
+    Learn about the React + Vite architecture
+  </Card>
+  <Card title="Routing" icon="route" href="/routing">
+    Understand React Router integration
+  </Card>
+  <Card title="Components" icon="puzzle-piece" href="/components/navbar">
+    Explore individual components
+  </Card>
+  <Card title="Customization" icon="palette" href="/customization/content">
+    Start customizing the portfolio
+  </Card>
+</CardGroup>
